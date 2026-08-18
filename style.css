@@ -1,0 +1,138 @@
+/* ==========================================================================
+   Variables y Estilos Globales SID
+   ========================================================================== */
+:root {
+    --primary: #89ceff;
+    --primary-container: #0ea5e9;
+    --secondary: #ffb0cd;
+    --tertiary: #f7be1d;
+    --background: #0f1418;
+    --on-background: #dee3e9;
+    --surface-container-high: #252b2f;
+}
+
+/* Efectos Glassmorphism y Neón */
+.glass-card {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.neon-glow:hover {
+    box-shadow: 0 0 15px rgba(14, 165, 233, 0.3);
+}
+
+.neon-text-primary {
+    text-shadow: 0 0 10px rgba(137, 206, 255, 0.5);
+}
+
+/* ==========================================================================
+   Navegación y Estados Activos
+   ========================================================================== */
+.nav-btn {
+    color: #475569; /* slate-600 */
+    font-weight: 500;
+    padding-bottom: 0.25rem;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.dark .nav-btn {
+    color: #94a3b8; /* slate-400 */
+}
+
+.nav-btn:hover {
+    color: #0f172a; /* slate-900 */
+}
+
+.dark .nav-btn:hover {
+    color: #ffffff;
+}
+
+/* Estado de enlace activo en escritorio */
+.nav-btn.active {
+    color: #0284c7 !important; /* sky-600 */
+    font-weight: 700;
+    border-bottom: 2px solid #0284c7;
+}
+
+.dark .nav-btn.active {
+    color: #38bdf8 !important; /* sky-400 */
+    border-bottom: 2px solid #38bdf8;
+}
+
+/* Enlaces versión móvil */
+.nav-btn-mobile {
+    display: block;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    color: #475569;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dark .nav-btn-mobile {
+    color: #94a3b8;
+}
+
+.nav-btn-mobile:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+}
+
+.dark .nav-btn-mobile:hover {
+    background-color: #121e28;
+    color: #ffffff;
+}
+
+.nav-btn-mobile.active {
+    background-color: #e0f2fe;
+    color: #0284c7;
+}
+
+.dark .nav-btn-mobile.active {
+    background-color: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+}
+
+/* ==========================================================================
+   Animación del Menú Hamburguesa
+   ========================================================================== */
+#mobile-menu {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#mobile-menu.hidden {
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+#mobile-menu:not(.hidden) {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Botones Filtros Tabs (Pills) */
+.tab-btn {
+    background-color: transparent;
+    border-color: rgba(148, 163, 184, 0.2); /* slate-400/20 */
+    color: #94a3b8; /* slate-400 */
+}
+
+.tab-btn:hover {
+    border-color: #38bdf8; /* sky-400 */
+    color: #38bdf8;
+}
+
+.tab-btn.active {
+    background-color: rgba(56, 189, 248, 0.15);
+    border-color: #38bdf8;
+    color: #38bdf8;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+/* Transición para resaltar la tarjeta objetivo */
+article {
+    transition: all 0.3s ease-in-out;
+}

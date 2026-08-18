@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividades - SID (Sociedad de Innovación y Desarrollo)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brandDark: '#0b1319',
+                        cardDark: '#121e28',
+                        primaryAccent: '#38bdf8',
+                        pinkAccent: '#f472b6'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@600;700;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body
+    class="bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white min-h-screen flex flex-col font-sans selection:bg-sky-500 selection:text-white transition-colors duration-300">
+
+    <!-- Header / Navigation -->
+    <header
+        class="bg-white/90 dark:bg-[#0b1319]/90 backdrop-blur-md border-b border-slate-200 dark:border-white/5 sticky top-0 z-50 transition-colors duration-300">
+        <div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+            <a class="flex items-center" href="index.html">
+                <img src="assets/logo/Mesa de trabajo 21 copia 9-8.png" alt="Logo SID"
+                    class="h-10 w-auto object-contain transition-transform hover:scale-105" />
+            </a>
+
+            <nav class="hidden lg:flex items-center gap-8" id="nav-desktop">
+                <a href="index.html" class="nav-btn">Inicio</a>
+                <a href="cronograma.html" class="nav-btn">Cronograma</a>
+                <a href="actividades.html" class="nav-btn active">Actividades</a>
+                <a href="integrantes.html" class="nav-btn">Integrantes</a>
+                <a href="inscripciones.html" class="nav-btn">Inscripciones</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <button id="theme-toggle"
+                    class="p-2 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                    aria-label="Cambiar tema claro/oscuro">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+
+                <button id="hamburger-btn"
+                    class="lg:hidden p-2 text-slate-700 dark:text-slate-200 hover:text-sky-500 dark:hover:text-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-500 rounded-lg transition-colors"
+                    aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú de navegación">
+                    <span class="material-symbols-outlined text-3xl">menu</span>
+                </button>
+            </div>
+        </div>
+
+        <nav id="mobile-menu"
+            class="hidden lg:hidden bg-white/95 dark:bg-[#0b1319]/95 border-b border-slate-200 dark:border-white/10 px-6 py-6 transition-all duration-300 shadow-xl"
+            aria-label="Menú móvil">
+            <div class="flex flex-col space-y-4">
+                <a href="index.html" class="nav-btn-mobile">Inicio</a>
+                <a href="cronograma.html" class="nav-btn-mobile">Cronograma</a>
+                <a href="actividades.html" class="nav-btn-mobile active">Actividades</a>
+                <a href="integrantes.html" class="nav-btn-mobile">Integrantes</a>
+                <a href="inscripciones.html" class="nav-btn-mobile">Inscripciones</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-grow max-w-7xl mx-auto px-6 py-10 w-full space-y-16">
+
+        <!-- Encabezado de Sección con Ilustración -->
+        <section
+            class="flex flex-col-reverse md:flex-row items-center justify-between gap-8 bg-slate-100 dark:bg-[#121e28] border border-slate-200 dark:border-white/5 rounded-3xl p-8 md:p-12">
+            <div class="space-y-4 max-w-xl">
+                <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white">
+                    Explora Nuestras <span class="text-sky-500 dark:text-sky-400">Actividades</span>
+                </h1>
+                <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed">
+                    Sumérgete en el ecosistema de innovación. Descubre los proyectos, talleres y eventos donde la
+                    creatividad y el desarrollo técnico se encuentran.
+                </p>
+
+                <!-- Sistema de Filtros (Tabs Pills) -->
+                <div class="flex flex-wrap gap-3 pt-4" id="filter-tabs">
+                    <button data-filter="todos"
+                        class="tab-btn active px-5 py-2 rounded-full text-xs font-semibold border transition-all duration-200">
+                        Todas
+                    </button>
+                    <button data-filter="en_curso"
+                        class="tab-btn px-5 py-2 rounded-full text-xs font-semibold border transition-all duration-200">
+                        En curso
+                    </button>
+                    <button data-filter="por_empezar"
+                        class="tab-btn px-5 py-2 rounded-full text-xs font-semibold border transition-all duration-200">
+                        Por empezar
+                    </button>
+                    <button data-filter="terminadas"
+                        class="tab-btn px-5 py-2 rounded-full text-xs font-semibold border transition-all duration-200">
+                        Terminadas
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mascota / Ilustración -->
+            <div class="w-48 md:w-64 flex-shrink-0 flex justify-center">
+                <img src="assets/pacha/Mesa de trabajo 21 copia 2-8.png" alt="Mascota SID"
+                    class="w-full h-auto object-contain drop-shadow-xl" />
+            </div>
+        </section>
+
+        <!-- Grid Responsive de Tarjetas de Actividades (1 col móvil, 2 tablet, 3 desktop) -->
+        <section>
+            <div id="actividades-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Se renderiza dinámicamente con JavaScript -->
+            </div>
+        </section>
+
+        <!-- Galería Fotográfica (Sección Inferior) -->
+        <section class="space-y-6 pt-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Galería Fotográfica</h2>
+
+            </div>
+
+            <!-- Layout Grid Asimétrico (1 col móvil, 3 col desktop) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="galeria-grid">
+                <!-- Tarjeta destacada izquierda (Spans 1 col, o 2 según pantalla) -->
+                <div id="galeria-destacada" class="lg:col-span-1">
+                    <!-- Dinámico -->
+                </div>
+
+                <!-- Cuadrícula secundaria derecha + Tarjeta de archivo -->
+                <div id="galeria-secundaria" class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Dinámico -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- Unified Footer -->
+    <footer
+        class="border-t border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-[#080d12] py-8 px-6 transition-colors duration-300">
+        <div
+            class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
+            <a class="flex items-center" href="index.html">
+                <img src="assets/logo/Mesa de trabajo 21 copia 12-8.png" alt="Logo SID"
+                    class="h-8 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity" />
+            </a>
+            <p>© 2026 Sociedad de Innovación y Desarrollo.</p>
+            <div class="flex items-center gap-5">
+                <!-- LinkedIn -->
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+                    class="text-slate-500 hover:text-sky-500 dark:text-slate-400 dark:hover:text-sky-400 transition-colors"
+                    aria-label="LinkedIn">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path
+                            d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                    </svg>
+                </a>
+
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/sid.ud?igsh=MndjM3o4OGVveTQw" target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-slate-500 hover:text-pink-500 dark:text-slate-400 dark:hover:text-pink-400 transition-colors"
+                    aria-label="Instagram">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                    </svg>
+                </a>
+
+                <!-- GitHub -->
+                <a href="https://github.com/UDSID" target="_blank" rel="noopener noreferrer"
+                    class="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
+                    aria-label="GitHub">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                </a>
+
+                <!-- Correo -->
+                <a href="mailto:sidud@udistrital.edu.co"
+                    class="text-slate-500 hover:text-sky-500 dark:text-slate-400 dark:hover:text-sky-400 transition-colors flex items-center"
+                    aria-label="Enviar correo">
+                    <span class="material-symbols-outlined text-xl">mail</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+    <div id="image-modal"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300">
+        <button id="modal-close"
+            class="absolute top-5 right-5 text-white/80 hover:text-white bg-slate-800/60 hover:bg-slate-800 p-2 rounded-full transition-colors z-10 flex items-center justify-center"
+            aria-label="Cerrar ventana">
+            <span class="material-symbols-outlined text-2xl">close</span>
+        </button>
+
+        <div
+            class="relative max-w-5xl max-h-[90vh] flex flex-col items-center justify-center bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+            <img id="modal-img" src="" alt="" class="max-h-[75vh] w-auto object-contain select-none" />
+
+            <div class="w-full p-4 bg-slate-900/90 border-t border-white/10 text-center">
+                <h3 id="modal-title" class="text-lg font-bold text-white"></h3>
+                <p id="modal-desc" class="text-xs text-slate-300 mt-1"></p>
+            </div>
+        </div>
+    </div>
+    <!-- Shared JavaScript -->
+    <script src="script.js"></script>
+</body>
+
+</html>

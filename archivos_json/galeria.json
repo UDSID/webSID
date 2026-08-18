@@ -1,0 +1,52 @@
+[
+  {
+    "titulo": "Biblioteca Paiba",
+    "evento": " Hackaton de programacion",
+    "imagen": "assets/galeria/carrusel.webp",
+    "destacada": true
+  },
+  {
+    "titulo": "El equipo mas duro",
+    "evento": " Hackaton 2025",
+    "imagen": "assets/galeria/carrusel1.webp",
+    "destacada": false
+  },
+  {
+    "titulo": "Los mas analiticos",
+    "evento": " Hackaton 2025",
+    "imagen": "assets/galeria/carrusel2.webp",
+    "destacada": false
+  },
+    {
+    "titulo": "Premiacion de la  Hackaton2025",
+    "evento": " Hackaton 2025",
+    "imagen": "assets/galeria/carrusel3.webp",
+    "destacada": true
+  },
+
+    {
+    "titulo": "Maraton 2026-1",
+    "evento": "Maraton 2026",
+    "imagen": "assets/galeria/carrusel4.webp",
+    "destacada": true
+  },
+
+    {
+    "titulo": "Competencia de just dance",
+    "evento": " semana SID",
+    "imagen": "assets/galeria/carrusel5.webp",
+    "destacada": false
+  },
+  {
+    "titulo": "foto ganadora",
+    "evento": "concurso de fotografia",
+    "imagen": "assets/galeria/flor.webp",
+    "destacada": true
+  },
+   {
+    "titulo": "competencia mario kart",
+    "evento": " semana SID",
+    "imagen": "assets/galeria/carrusel6.webp",
+    "destacada": false
+  }
+]

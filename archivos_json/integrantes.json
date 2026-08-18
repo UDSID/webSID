@@ -1,0 +1,71 @@
+[
+      {
+    "id": "integ-01",
+    "nombre": "Alex Mercer",
+    "rol": "Presidente / Lead Dev",
+    "foto": "assets/integrantes/bob.png",
+    "descripcion": "Especialista en infraestructura escalable y arquitecturas distribuidas. Apasionado por integrar IA en sistemas empresariales.",
+    "habilidades": ["Arquitectura Cloud", "AI/ML"],
+    "redes": {
+      "github": "https://github.com/alexmercer",
+      "linkedin": "https://linkedin.com/in/alexmercer",
+      "instagram": "https://instagram.com/alexmercer"
+    },
+    "iconoArea": "code"
+  },
+    {
+    "id": "integ-01",
+    "nombre": "David Lugo",
+    "rol": "Presidente / Lead Dev",
+    "foto": "assets/integrantes/david.webp",
+    "descripcion": "Especialista en infraestructura escalable y arquitecturas distribuidas. Apasionado por integrar IA en sistemas empresariales.",
+    "habilidades": ["Arquitectura Cloud", "AI/ML"],
+    "redes": {
+      "github": "https://github.com/alexmercer",
+      "linkedin": "https://linkedin.com/in/alexmercer",
+      "instagram": "https://instagram.com/alexmercer"
+    },
+    "iconoArea": "code"
+  },
+  {
+    "id": "integ-02",
+    "nombre": "Santiago Aldana",
+    "rol": "Vise Presidente",
+    "foto": "assets/integrantes/salda.png",
+    "descripcion": "Especialista en infraestructura escalable y arquitecturas distribuidas. Apasionado por integrar IA en sistemas empresariales.",
+    "habilidades": ["Arquitectura Cloud", "AI/ML"],
+    "redes": {
+      "github": "https://github.com/alexmercer",
+      "linkedin": "https://linkedin.com/in/alexmercer",
+      "instagram": "https://instagram.com/alexmercer"
+    },
+    "iconoArea": "code"
+  },
+  {
+    "id": "integ-03",
+    "nombre": "Maurico Tabajeres",
+    "rol": "VP / UX Director",
+    "foto": "assets/integrantes/mauricio.webp",
+    "descripcion": "Enfocada en diseñar experiencias accesibles y centradas en el usuario. Lidera el sistema de diseño visual de la organización.",
+    "habilidades": ["Design Systems", "UI/UX", "Figma"],
+    "redes": {
+      "github": "https://github.com/sophiachen",
+      "linkedin": "https://linkedin.com/in/sophiachen",
+      "instagram": "https://instagram.com/sophiachen"
+    },
+    "iconoArea": "palette"
+  },
+  {
+    "id": "integ-04",
+    "nombre": "Santiago Moreno",
+    "rol": "Data Scientist & Cybersecurity Lead",
+    "foto": "assets/integrantes/tiako.webp",
+    "descripcion": "Investigador en modelos predictivos y seguridad defensiva en entornos cloud. Mentor de talleres de código seguro.",
+    "habilidades": ["Python", "Ciberseguridad", "Data Pipelines"],
+    "redes": {
+      "github": "https://github.com/diegotorres",
+      "instagram": "https://instagram.com/diegotorres"
+    },
+    "iconoArea": "security"
+  }
+]
