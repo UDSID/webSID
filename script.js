@@ -1,27 +1,56 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    // ==========================================================================
+// ==========================================================================
     // MÓDULO 1: NAVEGACIÓN Y TEMA (GLOBAL)
     // ==========================================================================
 
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    if (themeToggleBtn) {
-        const themeIcon = themeToggleBtn.querySelector('.material-symbols-outlined');
+    // --------------------------------------------------------------------------
+    // 1.1. Lógica del Tema (Claro / Oscuro)
+    // --------------------------------------------------------------------------
+    
+    /**
+     * Obtiene el tema guardado en localStorage.
+     * Si es la primera visita (null), retorna 'dark' por defecto.
+     */
+    function getPreferredTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        return savedTheme ? savedTheme : 'dark';
+    }
 
-        if (document.documentElement.classList.contains('dark')) {
-            if (themeIcon) themeIcon.textContent = 'light_mode';
-        } else {
-            if (themeIcon) themeIcon.textContent = 'dark_mode';
-        }
+    /**
+     * Aplica la clase 'dark' al HTML, persiste la preferencia
+     * y actualiza el icono del botón #theme-toggle.
+     */
+    function applyTheme(theme) {
+        const isDark = theme === 'dark';
+        document.documentElement.classList.toggle('dark', isDark);
+        localStorage.setItem('theme', theme);
 
-        themeToggleBtn.addEventListener('click', () => {
-            const isDark = document.documentElement.classList.toggle('dark');
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        if (themeToggleBtn) {
+            const themeIcon = themeToggleBtn.querySelector('.material-symbols-outlined');
             if (themeIcon) {
+                // Si es dark muestra el sol para cambiar a claro, y viceversa
                 themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
             }
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+    }
+
+    // Inicialización inmediata del tema al cargar el script
+    applyTheme(getPreferredTheme());
+
+    // Event Listener para el botón de alternar tema
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const currentIsDark = document.documentElement.classList.contains('dark');
+            const newTheme = currentIsDark ? 'light' : 'dark';
+            applyTheme(newTheme);
         });
     }
+
+    // --------------------------------------------------------------------------
+    // 1.2. Menú Hamburguesa (Móvil)
+    // --------------------------------------------------------------------------
 
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const mobileMenu = document.getElementById('mobile-menu');
