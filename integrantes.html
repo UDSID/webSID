@@ -2,6 +2,18 @@
 <html lang="es" class="dark">
 
 <head>
+    <script>
+    // Se ejecuta de inmediato antes de que el navegador renderice el <body>
+    (function() {
+        const theme = localStorage.getItem('theme');
+        // Si la preferencia guardada es 'dark' o si es la primera vez (null), forzar 'dark'
+        if (theme === 'dark' || !theme) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    })();
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Integrantes - SID (Sociedad de Innovación y Desarrollo)</title>
