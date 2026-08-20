@@ -5,11 +5,10 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             document.getElementById("header-container").innerHTML = data;
             
-            // --- AGREGA ESTO AQUÍ ---
-            inicializarMenuHamburguesa(); 
-            // ------------------------
-            
+            // Actualizar el icono según el tema actual al cargar
             actualizarIconoTema();
+            
+            // Resaltar automáticamente el enlace de la página activa
             highlightActiveLink();
         });
 
@@ -20,11 +19,10 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("footer-container").innerHTML = data;
         });
 
-    // 3. Controlador del Modo Oscuro usando Delegación de Eventos
+    // 3. Controlador de eventos usando Delegación (Modo Oscuro + Menú Hamburguesa)
     document.addEventListener("click", function(e) {
-        // --- AQUÍ YA MANEJAS EL MODO OSCURO, AHORA SUMAMOS EL MENÚ ---
-        
-        // Manejo del botón de Hamburguesa
+
+        // Menú Hamburguesa
         const hamburgerBtn = e.target.closest("#hamburger-btn");
         if (hamburgerBtn) {
             const mobileMenu = document.getElementById("mobile-menu");
@@ -35,12 +33,52 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
 
-        // Manejo del botón de Modo Oscuro
+        // Verificar si el clic fue en el botón de cambiar tema o dentro de él
         const toggleBtn = e.target.closest("#theme-toggle");
         if (toggleBtn) {
+            // Alternar la clase 'dark' en la etiqueta <html>
             document.documentElement.classList.toggle("dark");
-            localStorage.setItem("theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
+
+            // Guardar la preferencia del usuario en el almacenamiento local
+            if (document.documentElement.classList.contains("dark")) {
+                localStorage.setItem("theme", "dark");
+            } else {
+                localStorage.setItem("theme", "light");
+            }
+
             actualizarIconoTema();
         }
     });
 });
+
+// Función para cambiar el icono del botón (de luna a sol o viceversa)
+function actualizarIconoTema() {
+    const toggleBtn = document.getElementById("theme-toggle");
+    if (!toggleBtn) return;
+
+    const iconSpan = toggleBtn.querySelector(".material-symbols-outlined");
+    if (!iconSpan) return;
+    if (document.documentElement.classList.contains("dark")) {
+        iconSpan.textContent = "light_mode"; // Mostrar sol si estamos en oscuro
+    } else {
+        iconSpan.textContent = "dark_mode";  // Mostrar luna si estamos en claro
+    }
+}
+
+// Función para detectar la página actual y agregar la clase 'active'
+function highlightActiveLink() {
+    const path = window.location.pathname;
+    let page = path.split("/").pop();
+    if (page === "" || page === "/") {
+        page = "index.html";
+    }
+    const navLinks = document.querySelectorAll('#header-container a');
+    navLinks.forEach(link => {
+        const linkHref = link.getAttribute("href");
+        if (linkHref === page) {
+            link.classList.add("active");
+        } else {
+            link.classList.remove("active");
+        }
+    });
+}
