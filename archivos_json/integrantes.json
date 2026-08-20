@@ -1,11 +1,14 @@
 [
-    {
+  {
     "id": "integ-01",
     "nombre": "David Lugo",
     "rol": "Presidente",
     "foto": "assets/integrantes/david.webp",
     "descripcion": "Líder estratégico encargado de coordinar la visión general del equipo. Apasionado por el desarrollo en Python y el diseño web, combina la gestión técnica con la creación de experiencias digitales intuitivas e innovadoras.",
-    "habilidades": ["Web designer ", "python"],
+    "habilidades": [
+      "Web designer ",
+      "python"
+    ],
     "redes": {
       "instagram": "https://www.instagram.com/dave_lp8/"
     },
@@ -17,7 +20,10 @@
     "rol": "Vice Presidente",
     "foto": "assets/integrantes/salda.png",
     "descripcion": "Coordinador operativo y especialista en infraestructura tecnológica. Enfocado en la arquitectura cloud y el diseño web, asegura que las soluciones no solo sean visualmente atractivas, sino también escalables y robustas.",
-    "habilidades": ["Arquitectura Cloud", "Web designer "],
+    "habilidades": [
+      "Arquitectura Cloud",
+      "Web designer "
+    ],
     "redes": {
       "instagram": "https://www.instagram.com/david_al813/"
     },
@@ -29,7 +35,10 @@
     "rol": "Network Engineer",
     "foto": "assets/integrantes/mauricio.webp",
     "descripcion": "Especialista en la infraestructura y seguridad de redes. Combina la programación en Python con sólidas prácticas de ciberseguridad para garantizar conectividades eficientes, estables y protegidas ante vulnerabilidades.",
-    "habilidades": ["Ciberseguridad", "python"],
+    "habilidades": [
+      "Ciberseguridad",
+      "python"
+    ],
     "redes": {
       "instagram": "https://www.instagram.com/idkpenta/"
     },
@@ -41,19 +50,25 @@
     "rol": "Cybersecurity Lead",
     "foto": "assets/integrantes/tiako.webp",
     "descripcion": "Encargado de la protección informática y el análisis de riesgos del equipo. Utiliza Python y metodologías avanzadas de ciberseguridad para auditar, proteger y fortificar nuestros activos y proyectos digitales.",
-    "habilidades": ["Python", "Ciberseguridad"],
+    "habilidades": [
+      "Python",
+      "Ciberseguridad"
+    ],
     "redes": {
       "instagram": "https://www.instagram.com/tyako_m46/"
     },
     "iconoArea": "security"
   },
-    {
+  {
     "id": "integ-05",
     "nombre": "Milu",
     "rol": "Community Manager",
     "foto": "assets/integrantes/milu.webp",
     "descripcion": "Gestora de la presencia digital y la voz de la comunidad. Integra el uso de IA generativa y desarrollo en Python para crear contenido dinámico, automatizar procesos de comunicación y potenciar el engagement del equipo.",
-    "habilidades": ["Python", "IA generativa"],
+    "habilidades": [
+      "Python",
+      "IA generativa"
+    ],
     "redes": {
       "instagram": "https://www.instagram.com/milu2662/"
     },
