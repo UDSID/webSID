@@ -1,29 +1,13 @@
 [
-      {
-    "id": "integ-01",
-    "nombre": "Alex Mercer",
-    "rol": "Presidente / Lead Dev",
-    "foto": "assets/integrantes/bob.png",
-    "descripcion": "Especialista en infraestructura escalable y arquitecturas distribuidas. Apasionado por integrar IA en sistemas empresariales.",
-    "habilidades": ["Arquitectura Cloud", "AI/ML"],
-    "redes": {
-      "github": "https://github.com/alexmercer",
-      "linkedin": "https://linkedin.com/in/alexmercer",
-      "instagram": "https://instagram.com/alexmercer"
-    },
-    "iconoArea": "code"
-  },
     {
     "id": "integ-01",
     "nombre": "David Lugo",
-    "rol": "Presidente / Lead Dev",
+    "rol": "Presidente",
     "foto": "assets/integrantes/david.webp",
-    "descripcion": "Especialista en infraestructura escalable y arquitecturas distribuidas. Apasionado por integrar IA en sistemas empresariales.",
-    "habilidades": ["Arquitectura Cloud", "AI/ML"],
+    "descripcion": "Líder estratégico encargado de coordinar la visión general del equipo. Apasionado por el desarrollo en Python y el diseño web, combina la gestión técnica con la creación de experiencias digitales intuitivas e innovadoras.",
+    "habilidades": ["Web designer ", "python"],
     "redes": {
-      "github": "https://github.com/alexmercer",
-      "linkedin": "https://linkedin.com/in/alexmercer",
-      "instagram": "https://instagram.com/alexmercer"
+      "instagram": "https://www.instagram.com/dave_lp8/"
     },
     "iconoArea": "code"
   },
@@ -32,40 +16,47 @@
     "nombre": "Santiago Aldana",
     "rol": "Vise Presidente",
     "foto": "assets/integrantes/salda.png",
-    "descripcion": "Especialista en infraestructura escalable y arquitecturas distribuidas. Apasionado por integrar IA en sistemas empresariales.",
-    "habilidades": ["Arquitectura Cloud", "AI/ML"],
+    "descripcion": "Coordinador operativo y especialista en infraestructura tecnológica. Enfocado en la arquitectura cloud y el diseño web, asegura que las soluciones no solo sean visualmente atractivas, sino también escalables y robustas.",
+    "habilidades": ["Arquitectura Cloud", "Web designer "],
     "redes": {
-      "github": "https://github.com/alexmercer",
-      "linkedin": "https://linkedin.com/in/alexmercer",
-      "instagram": "https://instagram.com/alexmercer"
+      "instagram": "https://www.instagram.com/david_al813/"
     },
     "iconoArea": "code"
   },
   {
     "id": "integ-03",
-    "nombre": "Maurico Tabajeres",
-    "rol": "VP / UX Director",
+    "nombre": "Mauricio Tabares",
+    "rol": "Network Engineer",
     "foto": "assets/integrantes/mauricio.webp",
-    "descripcion": "Enfocada en diseñar experiencias accesibles y centradas en el usuario. Lidera el sistema de diseño visual de la organización.",
-    "habilidades": ["Design Systems", "UI/UX", "Figma"],
+    "descripcion": "Especialista en la infraestructura y seguridad de redes. Combina la programación en Python con sólidas prácticas de ciberseguridad para garantizar conectividades eficientes, estables y protegidas ante vulnerabilidades.",
+    "habilidades": ["Ciberseguridad", "python"],
     "redes": {
-      "github": "https://github.com/sophiachen",
-      "linkedin": "https://linkedin.com/in/sophiachen",
-      "instagram": "https://instagram.com/sophiachen"
+      "instagram": "https://www.instagram.com/idkpenta/"
     },
-    "iconoArea": "palette"
+    "iconoArea": "security"
   },
   {
     "id": "integ-04",
     "nombre": "Santiago Moreno",
-    "rol": "Data Scientist & Cybersecurity Lead",
+    "rol": "Cybersecurity Lead",
     "foto": "assets/integrantes/tiako.webp",
-    "descripcion": "Investigador en modelos predictivos y seguridad defensiva en entornos cloud. Mentor de talleres de código seguro.",
-    "habilidades": ["Python", "Ciberseguridad", "Data Pipelines"],
+    "descripcion": "Encargado de la protección informática y el análisis de riesgos del equipo. Utiliza Python y metodologías avanzadas de ciberseguridad para auditar, proteger y fortificar nuestros activos y proyectos digitales.",
+    "habilidades": ["Python", "Ciberseguridad"],
     "redes": {
-      "github": "https://github.com/diegotorres",
-      "instagram": "https://instagram.com/diegotorres"
+      "instagram": "https://www.instagram.com/tyako_m46/"
     },
     "iconoArea": "security"
+  },
+    {
+    "id": "integ-05",
+    "nombre": "Milu",
+    "rol": "Community Manager",
+    "foto": "assets/integrantes/milu.webp",
+    "descripcion": "Gestora de la presencia digital y la voz de la comunidad. Integra el uso de IA generativa y desarrollo en Python para crear contenido dinámico, automatizar procesos de comunicación y potenciar el engagement del equipo.",
+    "habilidades": ["Python", "IA generativa"],
+    "redes": {
+      "instagram": "https://www.instagram.com/milu2662/"
+    },
+    "iconoArea": "palette"
   }
 ]

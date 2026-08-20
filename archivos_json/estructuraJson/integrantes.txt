@@ -1,0 +1,15 @@
+    {
+    "id": "integ-#",
+    "nombre": "",
+    "rol": "",
+    "foto": "direccion de la imagen",
+    "descripcion": "",
+    "habilidades": ["h1 ", "h2",....,"h3"],
+    "redes": {
+      "github": "https://github.com/    ",
+      "linkedin": "https://linkedin.com/in/",
+      "instagram": "https://instagram.com/"
+    },
+    "iconoArea": "code, security o palette"
+  },
+    

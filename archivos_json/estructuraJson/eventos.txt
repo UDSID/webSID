@@ -1,0 +1,13 @@
+  {
+    "id": "act-#",
+    "titulo": "",
+    "descripcion": "",
+    "categoria": "",
+    "estado": "en curso, proxima o terminada",
+    "fechaInicio": "",
+    "fechaFin": "",
+    "horaInicio": "",
+    "horaFin": "",
+    "lugar": "",
+    "colorAccent": ""
+  },

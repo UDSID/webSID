@@ -1,67 +1,18 @@
 [ 
   {
-    "id": "act-02",
-    "titulo": "Hackathon Interna SID 2026",
-    "descripcion": "Compite en equipo durante 24 horas para resolver retos tecnológicos con impacto social.",
-    "categoria": "Competencias",
-    "estado": "en curso",
-    "fechaInicio": "2026-09-17",
-    "fechaFin": "2026-09-23",
-    "horaInicio": "08:00",
-    "horaFin": "18:00",
-    "lugar": "Laboratorio de Computación Avanzada",
-    "colorAccent": "#f472b6"
-  },
-  {
-    "id": "act-03",
-    "titulo": "Conferencia: Inteligencia Artificial Aplicada",
-    "descripcion": "Ponencia con expertos de la industria sobre la integración de LLMs en flujos de trabajo empresariales.",
-    "categoria": "Conferencias",
-    "estado": "Proxima",
+    "id": "act-01",
+    "titulo": "Charla de modalidades de grados",
+    "descripcion": "¿Dudas sobre las modalidades de grado? Conéctate a nuestro Live de Instagram o visítanos en la oficina del grupo. Explicaremos las opciones disponibles y resolveremos tus preguntas en directo. ¡No te lo pierdas!",
+    "categoria": "Charla",
+    "estado": "PROXIMA",
     "fechaInicio": "2026-08-28",
-    "fechaFin": "2026-08-28",
-    "horaInicio": "14:00",
-    "horaFin": "16:00",
-    "lugar": "Paraninfo Aulas Barones",
-    "colorAccent": "#a855f7"
-  },
-  {
-    "id": "act-04",
-    "titulo": "Bootcamp de Git y GitHub Colaborativo",
-    "descripcion": "Domina el control de versiones, flujos de Pull Requests y resolución de conflictos en Git.",
-    "categoria": "Talleres",
-    "estado": "Finalizada",
-    "fechaInicio": "2026-08-05",
-    "fechaFin": "2026-08-06",
+    "fechaFin": "",
     "horaInicio": "10:00",
     "horaFin": "12:00",
-    "lugar": "Sala de Cómputo 3",
-    "colorAccent": "#34d399"
-  },
-  {
-    "id": "act-05",
-    "titulo": "Foro de Innovación y Desarrollo Sostenible",
-    "descripcion": "Mesa redonda sobre iniciativas tecnológicas alineadas con los Objetivos de Desarrollo Sostenible.",
-    "categoria": "Conferencias",
-    "estado": "Proxima",
-    "fechaInicio": "2026-09-02",
-    "fechaFin": "2026-09-02",
-    "horaInicio": "15:00",
-    "horaFin": "17:30",
-    "lugar": "Auditorio Principal",
-    "colorAccent": "#fbbf24"
-  },
-  {
-    "id": "act-06",
-    "titulo": "Session de Networking y Bienvenida SID",
-    "descripcion": "Encuentro de integración entre miembros antiguos e inscritos para presentar proyectos del semestre.",
-    "categoria": "Social",
-    "estado": "Finalizada",
-    "fechaInicio": "2026-08-01",
-    "fechaFin": "2026-08-01",
-    "horaInicio": "17:00",
-    "horaFin": "19:00",
-    "lugar": "Plaza Central UD",
-    "colorAccent": "#fb7185"
+    "lugar": "edificio administrativo, Piso 3, Oficina 1",
+    "link": "https://forms.cloud.microsoft/r/p13vZ4jWGk",
+    "colorAccent": "#b6f472"
   }
+  
+  
 ]

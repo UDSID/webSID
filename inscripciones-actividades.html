@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+
+<head>
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark' || !theme) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripción a Actividades - SID</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brandDark: '#0b1319',
+                        cardDark: '#121e28',
+                        primaryAccent: '#38bdf8',
+                        pinkAccent: '#f472b6'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@600;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white min-h-screen flex flex-col font-sans selection:bg-sky-500 selection:text-white transition-colors duration-300">
+
+    <!-- Header / Nav -->
+   <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-grow max-w-2xl mx-auto px-6 py-10 w-full space-y-8">
+        <div class="text-center space-y-2">
+            <h1 class="text-4xl font-extrabold text-sky-500 dark:text-sky-400">Inscripción a Actividades y Cursos</h1>
+            <p class="text-slate-600 dark:text-slate-400 text-sm">Completa tus datos institucionales para asegurar tu cupo en la actividad seleccionada.</p>
+        </div>
+
+        <form id="inscripcion-form" novalidate class="bg-white dark:bg-[#121e28] border border-slate-200 dark:border-white/5 rounded-2xl p-8 shadow-sm space-y-6">
+
+            <!-- 1. Nombre Completo -->
+            <div>
+                <label for="nombre" class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    Nombre Completo <span class="text-pink-500">*</span>
+                </label>
+                <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre y apellido" class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                <p id="nombre-error" class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm leading-none">error</span> Ingresa tu nombre completo.
+                </p>
+            </div>
+
+            <!-- 2. Código Estudiantil -->
+            <div>
+                <label for="codigo" class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    Código Estudiantil <span class="text-pink-500">*</span>
+                </label>
+                <input type="text" id="codigo" name="codigo" required placeholder="Ej. 20221020123" class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                <p id="codigo-error" class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm leading-none">error</span> Ingresa tu código estudiantil.
+                </p>
+            </div>
+
+            <!-- 3. Correo Institucional / Personal -->
+            <div>
+                <label for="correo" class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    Correo Institucional / Personal <span class="text-pink-500">*</span>
+                </label>
+                <input type="email" id="correo" name="correo" required placeholder="ejemplo@udistrital.edu.co" class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 flex items-start gap-1">
+                    <span class="material-symbols-outlined text-sm text-sky-400 leading-none">info</span>
+                    Se aceptan correos (<strong>@udistrital.edu.co</strong>) y (<strong>@gmail.com</strong>).
+                </p>
+                <p id="correo-error" class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm leading-none">error</span> Ingresa un correo válido (@udistrital.edu.co o @gmail.com)
+                </p>
+            </div>
+
+        <!-- 4. Selección Dinámica de Actividades/Cursos -->
+<div>
+    <label for="actividad" class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+        Actividad / Curso a Inscribir <span class="text-pink-500">*</span>
+    </label>
+    <select id="actividad" name="actividad" required class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+        <option value="" disabled selected>Cargando actividades...</option>
+    </select>
+    <p id="actividad-error" class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1">
+        <span class="material-symbols-outlined text-sm leading-none">error</span> Selecciona una actividad disponible.
+    </p>
+</div>
+
+            <!-- Botón de Envío -->
+            <button type="submit" id="submit-btn" class="w-full bg-sky-500 hover:bg-sky-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl shadow-lg transition-all flex justify-center items-center gap-2">
+                <span class="material-symbols-outlined" id="submit-icon">send</span>
+                <span id="submit-text">Confirmar Inscripción</span>
+            </button>
+        </form>
+    </main>
+
+    <!-- Modal de Éxito -->
+    <div id="success-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center px-4 bg-slate-950/70 backdrop-blur-sm">
+        <div class="bg-white dark:bg-[#121e28] border border-slate-200 dark:border-white/10 rounded-3xl p-8 max-w-sm w-full text-center space-y-4 shadow-2xl animate-[fadeIn_0.2s_ease-out]">
+            <div class="w-16 h-16 mx-auto bg-emerald-500/10 text-emerald-500 rounded-full flex items-center justify-center">
+                <span class="material-symbols-outlined text-4xl">check_circle</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">¡Inscripción Registrada!</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Te has registrado correctamente en la actividad. Atento a tu correo institucional.</p>
+            <button id="close-modal-btn" class="inline-block w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 rounded-xl transition-all">
+                Aceptar
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer Unificado -->
+   <div id="footer-container"></div>
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="inscripciones-actividades.js"></script>
+    <script src="components/components.js"></script>
+</body>
+
+</html>

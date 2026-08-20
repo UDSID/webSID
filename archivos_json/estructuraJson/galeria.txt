@@ -1,0 +1,6 @@
+  {
+    "titulo": "nombre de la imagen",
+    "evento": "que evento fue",
+    "imagen": "direccion de la imagen",
+    "destacada": false o true
+  },

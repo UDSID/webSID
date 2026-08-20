@@ -35,16 +35,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Si las inscripciones están cerradas, muestra la tarjeta con la invitación
     if (!INSCRIPCIONES_ABIERTAS) {
         form.classList.add('hidden');
-        
+
+        // Actualiza el encabezado ("Formulario de Inscripción" / subtítulo)
+        // para reflejar que las inscripciones están cerradas.
+        const pageTitle = document.getElementById('page-title');
+        const pageSubtitle = document.getElementById('page-subtitle');
+        if (pageTitle) pageTitle.textContent = 'Inscripciones Cerradas por el Momento';
+        if (pageSubtitle) pageSubtitle.textContent = 'Vuelve pronto.';
+
         const avisoCierre = document.createElement('div');
         avisoCierre.className = "bg-white dark:bg-[#121e28] border border-slate-200 dark:border-white/5 rounded-2xl p-8 text-center space-y-5 shadow-sm";
         avisoCierre.innerHTML = `
             <div class="w-16 h-16 mx-auto bg-emerald-500/10 text-emerald-500 rounded-full flex items-center justify-center">
-                <span class="material-symbols-outlined text-4xl">groups</span>
+                <span class="material-symbols-outlined text-4xl">lock_clock</span>
             </div>
-            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Inscripciones Próximamente</h2>
+          
             <p class="text-slate-600 dark:text-slate-400 text-sm max-w-md mx-auto">
-                Las inscripciones aún no están abiertas. Únete a nuestro foro de WhatsApp para estar al tanto de la información de la universidad y saber en qué momento se habilitarán.
+                El formulario de inscripciones está cerrado por el momento y se abrirá más adelante. Únete a nuestro foro de WhatsApp para enterarte apenas se habilite.
             </p>
             <a href="${WHATSAPP_FORO_URL}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg transition-all">
                 <span class="material-symbols-outlined text-xl">chat</span>
