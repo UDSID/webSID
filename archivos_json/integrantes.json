@@ -14,7 +14,7 @@
   {
     "id": "integ-02",
     "nombre": "Santiago Aldana",
-    "rol": "Vise Presidente",
+    "rol": "Vice Presidente",
     "foto": "assets/integrantes/salda.png",
     "descripcion": "Coordinador operativo y especialista en infraestructura tecnológica. Enfocado en la arquitectura cloud y el diseño web, asegura que las soluciones no solo sean visualmente atractivas, sino también escalables y robustas.",
     "habilidades": ["Arquitectura Cloud", "Web designer "],
