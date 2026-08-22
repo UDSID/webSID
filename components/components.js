@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", function() {
     // 1. Cargar el Header y luego inicializar sus funciones
-    fetch("components/header.html")
+    //    Ruta ABSOLUTA (empieza con "/") para que funcione sin importar
+    //    si la página está en la raíz o en una subcarpeta
+    //    (ej: /inscripcion competencias/inscripcion-competencias.html).
+    fetch("/components/header.html")
         .then(response => response.text())
         .then(data => {
             document.getElementById("header-container").innerHTML = data;
@@ -12,8 +15,8 @@ document.addEventListener("DOMContentLoaded", function() {
             highlightActiveLink();
         });
 
-    // 2. Cargar el Footer
-    fetch("components/footer.html")
+    // 2. Cargar el Footer (misma razón: ruta absoluta)
+    fetch("/components/footer.html")
         .then(response => response.text())
         .then(data => {
             document.getElementById("footer-container").innerHTML = data;
@@ -75,7 +78,10 @@ function highlightActiveLink() {
     const navLinks = document.querySelectorAll('#header-container a');
     navLinks.forEach(link => {
         const linkHref = link.getAttribute("href");
-        if (linkHref === page) {
+        // Normaliza quitando la barra inicial ("/index.html" -> "index.html")
+        // para que la comparación funcione ahora que los enlaces son absolutos.
+        const linkPage = linkHref ? linkHref.replace(/^\//, '') : '';
+        if (linkPage === page) {
             link.classList.add("active");
         } else {
             link.classList.remove("active");

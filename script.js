@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-// ==========================================================================
+    // ==========================================================================
     // MÓDULO 1: NAVEGACIÓN Y TEMA (GLOBAL)
     // ==========================================================================
 
@@ -50,8 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --------------------------------------------------------------------------
     // 1.3. Sombra dinámica del header + botón flotante "Volver arriba" (global)
-    // Ambos elementos son opcionales: si una página no tiene #site-header o
-    // #back-to-top, este bloque simplemente no hace nada en ella.
     // --------------------------------------------------------------------------
 
     const siteHeader = document.getElementById('site-header');
@@ -118,6 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
         let eventsData = [];
         let currentStartDate = new Date();
 
+        // Función auxiliar para obtener siempre el Lunes de la semana de una fecha dada
+        function getMonday(d) {
+            const date = new Date(d);
+            const day = date.getDay(); // 0 = Domingo, 1 = Lunes, ..., 6 = Sábado
+            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(date.setDate(diff));
+        }
+
         fetch('archivos_json/eventos.json')
             .then(res => {
                 if (!res.ok) throw new Error('No se encontró en archivos_json');
@@ -133,6 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function initCronograma(data) {
             eventsData = data;
+            // Forzamos el inicio en lunes al cargar
+            currentStartDate = getMonday(new Date());
             renderCalendar(currentStartDate, eventsData);
             renderUpcomingEvents(eventsData);
         }
@@ -153,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (todayBtn) {
             todayBtn.addEventListener('click', () => {
-                currentStartDate = new Date();
+                currentStartDate = getMonday(new Date());
                 renderCalendar(currentStartDate, eventsData);
             });
         }
@@ -169,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 calendarGrid.appendChild(headerCell);
             });
 
-            const daysCount = 21;
+            const daysCount = 21; // Siempre muestra 3 semanas completas
             const tempDate = new Date(startDate);
             const endDate = new Date(startDate);
             endDate.setDate(endDate.getDate() + daysCount - 1);
@@ -253,7 +261,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         document.querySelectorAll('.calendar-popover').forEach(p => {
                             p.classList.add('hidden');
                             p.classList.remove('flex');
-                            // Se reinicia el ajuste de posición de cualquier popover previamente movido
                             p.style.transform = '';
                         });
 
@@ -262,15 +269,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             popover.classList.remove('hidden');
                             popover.classList.add('flex');
 
-                            // --------------------------------------------------------------
-                            // Ajuste dinámico de posición (anti-corte en bordes del viewport)
-                            // No se modifican las clases de Tailwind (siguen centrando el
-                            // popover por defecto); solo se corrige con un transform inline
-                            // cuando el popover se saldría de la pantalla por izquierda/derecha.
-                            // --------------------------------------------------------------
                             requestAnimationFrame(() => {
                                 const rect = popover.getBoundingClientRect();
-                                const margen = 12; // separación mínima respecto al borde de la pantalla
+                                const margen = 12;
 
                                 const desbordeIzquierda = margen - rect.left;
                                 const desbordeDerecha = rect.right - (window.innerWidth - margen);
@@ -318,131 +319,133 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // ======================================================================
-// FUNCIÓN: renderUpcomingEvents (cronograma.html)
-// ======================================================================
-function renderUpcomingEvents(events) {
-    if (!upcomingEventsContainer) return;
-    upcomingEventsContainer.innerHTML = '';
+        // FUNCIÓN: renderUpcomingEvents (cronograma.html)
+        // ======================================================================
+        function renderUpcomingEvents(events) {
+            if (!upcomingEventsContainer) return;
+            upcomingEventsContainer.innerHTML = '';
 
-    const safeEvents = Array.isArray(events) ? events : [];
-    if (safeEvents.length === 0) {
-        upcomingEventsContainer.innerHTML = `
-        <div class="col-span-full text-center py-6 text-slate-400 text-xs">
-            No hay próximas actividades programadas.
-        </div>
-    `;
-        return;
-    }
-
-    const formatDateLocal = (d) => {
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${y}-${m}-${day}`;
-    };
-    const todayStr = formatDateLocal(new Date());
-
-    const enCurso = safeEvents.filter(e => {
-        const fInicio = e.fechaInicio || e.fecha;
-        const fFin = e.fechaFin || fInicio;
-        return fInicio && fFin && todayStr >= fInicio && todayStr <= fFin;
-    });
-
-    const futuras = safeEvents
-        .filter(e => {
-            const fInicio = e.fechaInicio || e.fecha;
-            return fInicio && fInicio > todayStr;
-        })
-        .sort((a, b) => (a.fechaInicio || a.fecha).localeCompare(b.fechaInicio || b.fecha));
-
-    const upcoming = [...enCurso, ...futuras].slice(0, 2);
-
-    if (upcoming.length === 0) {
-        upcomingEventsContainer.innerHTML = `
-        <div class="col-span-full text-center py-6 text-slate-400 text-xs">
-            No hay próximas actividades programadas.
-        </div>
-    `;
-        return;
-    }
-
-    upcoming.forEach(evt => {
-        const fInicio = evt.fechaInicio || evt.fecha || 'Próximamente';
-        const horaTexto = (evt.horaInicio && evt.horaFin)
-            ? `${evt.horaInicio} - ${evt.horaFin}`
-            : (evt.horario || evt.horaInicio || 'Por definir');
-
-        const statusBadge = getStatusBadge(evt.estado);
-
-        const card = document.createElement('div');
-        card.className = 'bg-slate-100 dark:bg-[#121e28] border border-slate-200 dark:border-white/5 rounded-2xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-300';
-        
-        card.innerHTML = `
-        <div class="space-y-3">
-            <div class="flex items-center justify-between text-xs text-slate-400">
-                <span class="flex items-center gap-1 font-medium text-sky-400">
-                    <span class="material-symbols-outlined text-sm">calendar_today</span>
-                    ${fInicio}
-                </span>
-                <div class="flex items-center gap-1.5">
-                    ${statusBadge}
-                    <span class="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2.5 py-0.5 rounded-full font-semibold">
-                        ${evt.categoria || 'General'}
-                    </span>
+            const safeEvents = Array.isArray(events) ? events : [];
+            if (safeEvents.length === 0) {
+                upcomingEventsContainer.innerHTML = `
+                <div class="col-span-full text-center py-6 text-slate-400 text-xs">
+                    No hay próximas actividades programadas.
                 </div>
-            </div>
-            <h4 class="font-bold text-slate-900 dark:text-white text-base leading-snug break-words">${evt.titulo || 'Sin título'}</h4>
-            
-            <div class="space-y-1">
-                <!-- Se agregó break-words para forzar el salto de línea en texto continuo -->
-                <p class="card-desc text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed transition-all duration-300 break-words">${evt.descripcion || ''}</p>
-                ${(evt.descripcion && evt.descripcion.length > 80) ? `
-                    <button type="button" class="toggle-expand-btn text-[11px] text-sky-400 hover:underline font-semibold focus:outline-none flex items-center gap-0.5 mt-1">
-                        <span class="btn-text">Ver más</span>
-                        <span class="material-symbols-outlined text-xs btn-icon">expand_more</span>
-                    </button>
-                ` : ''}
-            </div>
-        </div>
-        
-        <div class="pt-4 mt-4 border-t border-slate-200 dark:border-white/5 flex items-center justify-between text-xs text-slate-400">
-            <span class="flex items-center gap-1">
-                <span class="material-symbols-outlined text-sm text-sky-400">schedule</span>
-                ${horaTexto}
-            </span>
-            <a href="actividades.html#${evt.id || ''}" class="text-sky-400 hover:underline font-semibold flex items-center gap-1">
-                Ver detalles <span class="material-symbols-outlined text-sm">arrow_forward</span>
-            </a>
-        </div>
-    `;
+            `;
+                return;
+            }
 
-        const toggleBtn = card.querySelector('.toggle-expand-btn');
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const desc = card.querySelector('.card-desc');
-                const btnText = toggleBtn.querySelector('.btn-text');
-                const btnIcon = toggleBtn.querySelector('.btn-icon');
+            const formatDateLocal = (d) => {
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${y}-${m}-${day}`;
+            };
+            const todayStr = formatDateLocal(new Date());
 
-                const isExpanded = desc.classList.contains('line-clamp-none');
-                if (isExpanded) {
-                    desc.classList.remove('line-clamp-none');
-                    desc.classList.add('line-clamp-2');
-                    btnText.textContent = 'Ver más';
-                    btnIcon.textContent = 'expand_more';
-                } else {
-                    desc.classList.remove('line-clamp-2');
-                    desc.classList.add('line-clamp-none');
-                    btnText.textContent = 'Ver menos';
-                    btnIcon.textContent = 'expand_less';
+            const enCurso = safeEvents.filter(e => {
+                const fInicio = e.fechaInicio || e.fecha;
+                const fFin = e.fechaFin || fInicio;
+                return fInicio && fFin && todayStr >= fInicio && todayStr <= fFin;
+            });
+
+            const futuras = safeEvents
+                .filter(e => {
+                    const fInicio = e.fechaInicio || e.fecha;
+                    return fInicio && fInicio > todayStr;
+                })
+                .sort((a, b) => (a.fechaInicio || a.fecha).localeCompare(b.fechaInicio || b.fecha));
+
+            const upcoming = [...enCurso, ...futuras].slice(0, 2);
+
+            if (upcoming.length === 0) {
+                upcomingEventsContainer.innerHTML = `
+                <div class="col-span-full text-center py-6 text-slate-400 text-xs">
+                    No hay próximas actividades programadas.
+                </div>
+            `;
+                return;
+            }
+
+            upcoming.forEach(evt => {
+                const fInicio = evt.fechaInicio || evt.fecha || 'Próximamente';
+                const horaTexto = (evt.horaInicio && evt.horaFin)
+                    ? `${evt.horaInicio} - ${evt.horaFin}`
+                    : (evt.horario || evt.horaInicio || 'Por definir');
+
+                // Soporte por si la función global ya está cargada o no
+                const statusBadge = typeof getStatusBadge === 'function' ? getStatusBadge(evt.estado) : `<span class="border text-xs font-semibold px-2.5 py-0.5 rounded-full bg-sky-500/10 text-sky-500 border-sky-500/20">${evt.estado || 'General'}</span>`;
+
+                const card = document.createElement('div');
+                card.className = 'bg-slate-100 dark:bg-[#121e28] border border-slate-200 dark:border-white/5 rounded-2xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-300';
+                
+                card.innerHTML = `
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between text-xs text-slate-400">
+                        <span class="flex items-center gap-1 font-medium text-sky-400">
+                            <span class="material-symbols-outlined text-sm">calendar_today</span>
+                            ${fInicio}
+                        </span>
+                        <div class="flex items-center gap-1.5">
+                            ${statusBadge}
+                            <span class="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2.5 py-0.5 rounded-full font-semibold">
+                                ${evt.categoria || 'General'}
+                            </span>
+                        </div>
+                    </div>
+                    <h4 class="font-bold text-slate-900 dark:text-white text-base leading-snug break-words">${evt.titulo || 'Sin título'}</h4>
+                    
+                    <div class="space-y-1">
+                        <p class="card-desc text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed transition-all duration-300 break-words">${evt.descripcion || ''}</p>
+                        ${(evt.descripcion && evt.descripcion.length > 80) ? `
+                            <button type="button" class="toggle-expand-btn text-[11px] text-sky-400 hover:underline font-semibold focus:outline-none flex items-center gap-0.5 mt-1">
+                                <span class="btn-text">Ver más</span>
+                                <span class="material-symbols-outlined text-xs btn-icon">expand_more</span>
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+                
+                <div class="pt-4 mt-4 border-t border-slate-200 dark:border-white/5 flex items-center justify-between text-xs text-slate-400">
+                    <span class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm text-sky-400">schedule</span>
+                        ${horaTexto}
+                    </span>
+                    <a href="actividades.html#${evt.id || ''}" class="text-sky-400 hover:underline font-semibold flex items-center gap-1">
+                        Ver detalles <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </a>
+                </div>
+            `;
+
+                const toggleBtn = card.querySelector('.toggle-expand-btn');
+                if (toggleBtn) {
+                    toggleBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const desc = card.querySelector('.card-desc');
+                        const btnText = toggleBtn.querySelector('.btn-text');
+                        const btnIcon = toggleBtn.querySelector('.btn-icon');
+
+                        const isExpanded = desc.classList.contains('line-clamp-none');
+                        if (isExpanded) {
+                            desc.classList.remove('line-clamp-none');
+                            desc.classList.add('line-clamp-2');
+                            btnText.textContent = 'Ver más';
+                            btnIcon.textContent = 'expand_more';
+                        } else {
+                            desc.classList.remove('line-clamp-2');
+                            desc.classList.add('line-clamp-none');
+                            btnText.textContent = 'Ver menos';
+                            btnIcon.textContent = 'expand_less';
+                        }
+                    });
                 }
+
+                upcomingEventsContainer.appendChild(card);
             });
         }
-
-        upcomingEventsContainer.appendChild(card);
-    });
-}
     }
+
+
     // ==========================================================================
     // MÓDULO 3: ACTIVIDADES Y GALERÍA (actividades.html)
     // ==========================================================================
@@ -453,7 +456,6 @@ function renderUpcomingEvents(events) {
     const galeriaSecundariaContainer = document.getElementById('galeria-secundaria');
     const filterContainer = document.getElementById('status-filter-container') || document.getElementById('filter-tabs');
 
-    // Función auxiliar para badges de estado si no está definida globalmente
     const safeGetStatusBadge = (estado) => {
         if (typeof getStatusBadge === 'function') return getStatusBadge(estado);
         const est = (estado || '').toLowerCase().replace('_', ' ');
@@ -468,7 +470,6 @@ function renderUpcomingEvents(events) {
     if (actividadesGrid) {
         let todasLasActividades = [];
 
-        // 1. Carga de Eventos y Actividades desde eventos.json
         fetch('archivos_json/eventos.json')
             .then(res => {
                 if (!res.ok) throw new Error('No encontrado en archivos_json');
@@ -489,7 +490,6 @@ function renderUpcomingEvents(events) {
                     });
             });
 
-        // 2. Inicialización del módulo y listeners de filtrado
         function initActividadesYGaleria(data) {
             todasLasActividades = Array.isArray(data) ? data : (data.actividades || []);
             const fotosGaleria = Array.isArray(data) ? [] : (data.galeria || []);
@@ -502,7 +502,6 @@ function renderUpcomingEvents(events) {
                 cargarGaleriaIndependiente();
             }
 
-            // Event Listeners para Filtros por Estado (soporta .status-btn y .tab-btn)
             if (filterContainer) {
                 const filterButtons = filterContainer.querySelectorAll('.status-btn, .tab-btn');
 
@@ -535,162 +534,144 @@ function renderUpcomingEvents(events) {
             }
         }
 
-        // 3. Renderizado Dinámico de Tarjetas de Actividades
-     // ==========================================================================
-// RENDERIZADO DINÁMICO DE TARJETAS DE ACTIVIDADES (script.js)
-// ==========================================================================
-function renderActividades(lista) {
-    if (!actividadesGrid) return;
-    actividadesGrid.innerHTML = '';
+        function renderActividades(lista) {
+            if (!actividadesGrid) return;
+            actividadesGrid.innerHTML = '';
 
-    if (!lista || lista.length === 0) {
-        actividadesGrid.innerHTML = `
-            <div class="col-span-full text-center py-12 text-slate-400 text-sm">
-                No hay actividades registradas en este estado.
-            </div>
-        `;
-        return;
-    }
-
-    lista.forEach(act => {
-        const card = document.createElement('article');
-        card.id = act.id || '';
-        card.className = 'bg-slate-100 dark:bg-[#121e28] border border-slate-200 dark:border-white/5 rounded-3xl p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-300';
-
-        const fInicio = act.fechaInicio || act.fecha || 'Por definir';
-        const horaTexto = (act.horaInicio && act.horaFin)
-            ? `${act.horaInicio} - ${act.horaFin}`
-            : (act.horario || act.horaInicio || 'Por definir');
-
-        const statusBadge = safeGetStatusBadge(act.estado);
-
-        // ------------------------------------------------------------------
-        // LÓGICA CONDICIONAL DE ENLACES (CASO A vs CASO B)
-        // ------------------------------------------------------------------
-        const enlaceValido = (act.link && act.link.trim() !== '') 
-            ? act.link.trim() 
-            : ((act.link_reunion && act.link_reunion.trim() !== '') ? act.link_reunion.trim() : null);
-
-        // ------------------------------------------------------------------
-        // LÓGICA CONDICIONAL DE ESTADO (regla de negocio)
-        // Se reutiliza la misma normalización que ya usa getStatusBadge/safeGetStatusBadge
-        // para no introducir un criterio de comparación distinto al resto del código.
-        // ------------------------------------------------------------------
-        const estadoNormalizado = (act.estado || '').toLowerCase().replace('_', ' ');
-        const esEstadoTerminado = estadoNormalizado.includes('terminad') || estadoNormalizado.includes('finalizada');
-        const esEstadoEnCurso = estadoNormalizado.includes('curso');
-
-        let botonHTML = '';
-
-        if (enlaceValido) {
-            // CASO A: Existe enlace válido -> Abrir en nueva pestaña
-            // Regla 1: si el estado es "terminado" (o equivalente), el botón de enlace se oculta por completo.
-            if (!esEstadoTerminado) {
-                botonHTML = `
-                    <a href="${enlaceValido}" target="_blank" rel="noopener noreferrer" 
-                       class="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5 shadow-sm">
-                        <span>Unirse al evento</span>
-                        <span class="material-symbols-outlined text-sm">open_in_new</span>
-                    </a>
-                `;
-            }
-        } else {
-            // CASO B: NO existe enlace -> Redirigir a la página de inscripción con el ID del evento
-            // Regla 2: si el estado es "en curso" o "terminado" (equivalente), el botón "Inscribirse" no se renderiza.
-            if (!esEstadoEnCurso && !esEstadoTerminado) {
-                const eventoParam = act.id ? encodeURIComponent(act.id) : encodeURIComponent(act.titulo || '');
-                botonHTML = `
-                    <a href="inscripciones-actividades.html?evento=${eventoParam}" 
-                       class="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5 shadow-sm">
-                        <span>Inscribirse</span>
-                        <span class="material-symbols-outlined text-sm">how_to_reg</span>
-                    </a>
-                `;
-            }
-        }
-
-        card.innerHTML = `
-            <div class="space-y-4">
-                <div class="flex items-center justify-between flex-wrap gap-2">
-                    <div class="flex items-center gap-1.5">
-                        <span class="bg-sky-500/10 text-sky-500 border border-sky-500/20 text-xs font-semibold px-3 py-1 rounded-full">
-                            ${act.categoria || 'General'}
-                        </span>
-                        ${statusBadge}
+            if (!lista || lista.length === 0) {
+                actividadesGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-slate-400 text-sm">
+                        No hay actividades registradas en este estado.
                     </div>
-                    <span class="text-xs text-slate-400 flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm text-sky-400">location_on</span>
-                        ${act.ubicacion || act.lugar || 'Por definir'}
-                    </span>
-                </div>
+                `;
+                return;
+            }
 
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white leading-snug break-words">${act.titulo}</h3>
-                
-                ${act.speaker ? `
-                    <p class="text-xs font-semibold text-sky-500 dark:text-sky-400 flex items-center gap-1 break-words">
-                        <span class="material-symbols-outlined text-sm">record_voice_over</span>
-                        ${act.speaker}
-                    </p>
-                ` : ''}
+            lista.forEach(act => {
+                const card = document.createElement('article');
+                card.id = act.id || '';
+                card.className = 'bg-slate-100 dark:bg-[#121e28] border border-slate-200 dark:border-white/5 rounded-3xl p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-300';
 
-                <div class="space-y-1">
-                    <p class="card-desc text-slate-600 dark:text-slate-400 text-xs leading-relaxed line-clamp-3 transition-all duration-300 break-words">${act.descripcion || ''}</p>
-                    ${(act.descripcion && act.descripcion.length > 100) ? `
-                        <button type="button" class="toggle-expand-btn text-[11px] text-sky-400 hover:underline font-semibold focus:outline-none flex items-center gap-0.5 mt-1">
-                            <span class="btn-text">Ver más</span>
-                            <span class="material-symbols-outlined text-xs btn-icon">expand_more</span>
-                        </button>
-                    ` : ''}
-                </div>
-            </div>
+                const fInicio = act.fechaInicio || act.fecha || 'Por definir';
+                const horaTexto = (act.horaInicio && act.horaFin)
+                    ? `${act.horaInicio} - ${act.horaFin}`
+                    : (act.horario || act.horaInicio || 'Por definir');
 
-            <div class="pt-6 mt-6 border-t border-slate-200 dark:border-white/5 flex items-center justify-between text-xs text-slate-400">
-                <div class="flex flex-col gap-1">
-                    <span class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm text-sky-400">calendar_today</span>
-                        ${fInicio}
-                    </span>
-                    <span class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm text-sky-400">schedule</span>
-                        ${horaTexto}
-                    </span>
-                </div>
-                ${botonHTML}
-            </div>
-        `;
+                const statusBadge = safeGetStatusBadge(act.estado);
 
-        // Expandir / contraer descripción
-        const toggleBtn = card.querySelector('.toggle-expand-btn');
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const desc = card.querySelector('.card-desc');
-                const btnText = toggleBtn.querySelector('.btn-text');
-                const btnIcon = toggleBtn.querySelector('.btn-icon');
+                const enlaceValido = (act.link && act.link.trim() !== '') 
+                    ? act.link.trim() 
+                    : ((act.link_reunion && act.link_reunion.trim() !== '') ? act.link_reunion.trim() : null);
 
-                const isExpanded = desc.classList.contains('line-clamp-none');
-                if (isExpanded) {
-                    desc.classList.remove('line-clamp-none');
-                    desc.classList.add('line-clamp-3');
-                    btnText.textContent = 'Ver más';
-                    btnIcon.textContent = 'expand_more';
+                const estadoNormalizado = (act.estado || '').toLowerCase().replace('_', ' ');
+                const esEstadoTerminado = estadoNormalizado.includes('terminad') || estadoNormalizado.includes('finalizada');
+                const esEstadoEnCurso = estadoNormalizado.includes('curso');
+
+                let botonHTML = '';
+
+                if (enlaceValido) {
+                    if (!esEstadoTerminado) {
+                        botonHTML = `
+                            <a href="${enlaceValido}" target="_blank" rel="noopener noreferrer" 
+                               class="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5 shadow-sm">
+                                <span>Unirse al evento</span>
+                                <span class="material-symbols-outlined text-sm">open_in_new</span>
+                            </a>
+                        `;
+                    }
                 } else {
-                    desc.classList.remove('line-clamp-3');
-                    desc.classList.add('line-clamp-none');
-                    btnText.textContent = 'Ver menos';
-                    btnIcon.textContent = 'expand_less';
+                    if (!esEstadoEnCurso && !esEstadoTerminado) {
+                        const eventoParam = act.id ? encodeURIComponent(act.id) : encodeURIComponent(act.titulo || '');
+                        botonHTML = `
+                            <a href="inscripciones-actividades.html?evento=${eventoParam}" 
+                               class="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5 shadow-sm">
+                                <span>Inscribirse</span>
+                                <span class="material-symbols-outlined text-sm">how_to_reg</span>
+                            </a>
+                        `;
+                    }
                 }
+
+                card.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <div class="flex items-center gap-1.5">
+                                <span class="bg-sky-500/10 text-sky-500 border border-sky-500/20 text-xs font-semibold px-3 py-1 rounded-full">
+                                    ${act.categoria || 'General'}
+                                </span>
+                                ${statusBadge}
+                            </div>
+                            <span class="text-xs text-slate-400 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm text-sky-400">location_on</span>
+                                ${act.ubicacion || act.lugar || 'Por definir'}
+                            </span>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white leading-snug break-words">${act.titulo}</h3>
+                        
+                        ${act.speaker ? `
+                            <p class="text-xs font-semibold text-sky-500 dark:text-sky-400 flex items-center gap-1 break-words">
+                                <span class="material-symbols-outlined text-sm">record_voice_over</span>
+                                ${act.speaker}
+                            </p>
+                        ` : ''}
+
+                        <div class="space-y-1">
+                            <p class="card-desc text-slate-600 dark:text-slate-400 text-xs leading-relaxed line-clamp-3 transition-all duration-300 break-words">${act.descripcion || ''}</p>
+                            ${(act.descripcion && act.descripcion.length > 100) ? `
+                                <button type="button" class="toggle-expand-btn text-[11px] text-sky-400 hover:underline font-semibold focus:outline-none flex items-center gap-0.5 mt-1">
+                                    <span class="btn-text">Ver más</span>
+                                    <span class="material-symbols-outlined text-xs btn-icon">expand_more</span>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <div class="pt-6 mt-6 border-t border-slate-200 dark:border-white/5 flex items-center justify-between text-xs text-slate-400">
+                        <div class="flex flex-col gap-1">
+                            <span class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm text-sky-400">calendar_today</span>
+                                ${fInicio}
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm text-sky-400">schedule</span>
+                                ${horaTexto}
+                            </span>
+                        </div>
+                        ${botonHTML}
+                    </div>
+                `;
+
+                const toggleBtn = card.querySelector('.toggle-expand-btn');
+                if (toggleBtn) {
+                    toggleBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const desc = card.querySelector('.card-desc');
+                        const btnText = toggleBtn.querySelector('.btn-text');
+                        const btnIcon = toggleBtn.querySelector('.btn-icon');
+
+                        const isExpanded = desc.classList.contains('line-clamp-none');
+                        if (isExpanded) {
+                            desc.classList.remove('line-clamp-none');
+                            desc.classList.add('line-clamp-3');
+                            btnText.textContent = 'Ver más';
+                            btnIcon.textContent = 'expand_more';
+                        } else {
+                            desc.classList.remove('line-clamp-3');
+                            desc.classList.add('line-clamp-none');
+                            btnText.textContent = 'Ver menos';
+                            btnIcon.textContent = 'expand_less';
+                        }
+                    });
+                }
+
+                actividadesGrid.appendChild(card);
             });
         }
 
-        actividadesGrid.appendChild(card);
-    });
-}
-        // 4. Renderizado Dinámico de Galería (Soporta estructura simple y contenedores asimétricos)
         function renderGaleria(listaFotos) {
             if (!listaFotos || listaFotos.length === 0) return;
 
-            // Opción A: Galería estándar en grid simple
             if (galeriaGrid) {
                 galeriaGrid.innerHTML = '';
                 listaFotos.forEach(item => {
@@ -725,7 +706,6 @@ function renderActividades(lista) {
                 });
             }
 
-            // Opción B: Layout Asimétrico Destacado/Secundarias
             if (galeriaDestacadaContainer && galeriaSecundariaContainer) {
                 galeriaDestacadaContainer.innerHTML = '';
                 galeriaSecundariaContainer.innerHTML = '';
@@ -778,7 +758,6 @@ function renderActividades(lista) {
             }
         }
 
-        // 5. Carga de respaldo para galeria.json independiente
         function cargarGaleriaIndependiente() {
             fetch('archivos_json/galeria.json')
                 .then(res => {
@@ -794,6 +773,8 @@ function renderActividades(lista) {
                 });
         }
     }
+
+
     // ==========================================================================
     // MÓDULO LIGHTBOX / VISOR DE IMÁGENES
     // ==========================================================================
@@ -811,21 +792,20 @@ function renderActividades(lista) {
 
         modal.classList.remove('hidden');
         modal.classList.add('flex');
-        document.body.style.overflow = 'hidden'; // Bloquea el scroll de la página de fondo
+        document.body.style.overflow = 'hidden'; 
     };
 
     function cerrarModal() {
         if (!modal) return;
         modal.classList.add('hidden');
         modal.classList.remove('flex');
-        document.body.style.overflow = 'auto'; // Restaura el scroll
+        document.body.style.overflow = 'auto'; 
     }
 
     if (modalClose) {
         modalClose.addEventListener('click', cerrarModal);
     }
 
-    // Cerrar al hacer clic fuera del contenido o presionar la tecla ESC
     if (modal) {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) cerrarModal();
@@ -926,9 +906,10 @@ function renderActividades(lista) {
             });
         }
     }
+
+
     // ==========================================================================
     // HELPER GLOBAL: Carga de JSON sin caché, con fallback de ruta
-    // (Usado por Módulo 5 - Próximos Eventos y Módulo 6 - Carrusel Momentos SID)
     // ==========================================================================
 
     function cargarJSON(nombreArchivo) {
@@ -939,6 +920,155 @@ function renderActividades(lista) {
                 return res.json();
             })
             .catch(() => fetch(nombreArchivo, opciones).then(res => res.json()));
+    }
+
+
+    // ==========================================================================
+    // MÓDULO 5: CARRUSEL "PRÓXIMOS EVENTOS" (index.html)
+    // ==========================================================================
+
+    const proximoEventoCard = document.getElementById('proximo-evento-card');
+
+    if (proximoEventoCard) {
+        const trackEl = document.getElementById('proximo-evento-track');
+        const dotsEl = document.getElementById('proximo-evento-dots');
+        const prevBtn = document.getElementById('proximo-evento-prev');
+        const nextBtn = document.getElementById('proximo-evento-next');
+
+        let eventosSlides = [];
+        let eventoIndex = 0;
+        let eventoAutoplay = null;
+
+        cargarJSON('eventos.json')
+            .then(data => initProximosEventosCarousel(data))
+            .catch(err => {
+                console.error('Error al cargar eventos.json (carrusel próximos eventos):', err);
+                if (trackEl) {
+                    trackEl.innerHTML = `<p class="text-xs text-slate-500 dark:text-slate-400 shrink-0 w-full">No se pudieron cargar los eventos.</p>`;
+                }
+                if (prevBtn) prevBtn.classList.add('hidden');
+                if (nextBtn) nextBtn.classList.add('hidden');
+            });
+
+        function initProximosEventosCarousel(eventos) {
+            if (!Array.isArray(eventos)) eventos = [];
+
+            const formatDateLocal = (d) => {
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${y}-${m}-${day}`;
+            };
+            const todayStr = formatDateLocal(new Date());
+
+            const enCurso = eventos.filter(e => (e.estado || '').toLowerCase() === 'en curso');
+
+            const futuros = eventos
+                .filter(e => (e.estado || '').toLowerCase() !== 'en curso' && e.fechaInicio && e.fechaInicio >= todayStr)
+                .sort((a, b) => a.fechaInicio.localeCompare(b.fechaInicio));
+
+            eventosSlides = [...enCurso, ...futuros].slice(0, 5).map(evento => ({
+                titulo: evento.titulo || '',
+                badge: calcularBadge(evento, todayStr),
+                detalle: construirDetalle(evento)
+            }));
+
+            if (!eventosSlides.length) {
+                trackEl.innerHTML = `<p class="text-xs text-slate-500 dark:text-slate-400 shrink-0 w-full">No hay eventos próximos por ahora.</p>`;
+                if (prevBtn) prevBtn.classList.add('hidden');
+                if (nextBtn) nextBtn.classList.add('hidden');
+                return;
+            }
+
+            renderEventoSlides();
+            renderEventoDots();
+            goToEventoSlide(0);
+
+            if (eventosSlides.length > 1) {
+                startEventoAutoplay();
+                proximoEventoCard.addEventListener('mouseenter', stopEventoAutoplay);
+                proximoEventoCard.addEventListener('mouseleave', startEventoAutoplay);
+            } else {
+                if (prevBtn) prevBtn.classList.add('hidden');
+                if (nextBtn) nextBtn.classList.add('hidden');
+            }
+        }
+
+        function calcularBadge(evento, todayStr) {
+            const estado = (evento.estado || '').toLowerCase();
+            if (estado === 'en curso') return 'En curso';
+            if (evento.fechaInicio) {
+                const diffDias = Math.round(
+                    (new Date(evento.fechaInicio) - new Date(todayStr)) / (1000 * 60 * 60 * 24)
+                );
+                if (diffDias === 0) return 'Hoy';
+                if (diffDias === 1) return 'Mañana';
+                if (diffDias > 1) return `En ${diffDias} días`;
+                return evento.fechaInicio;
+            }
+            return 'Próximamente';
+        }
+
+        function construirDetalle(evento) {
+            const partes = [];
+            if (evento.lugar) partes.push(`📍 ${evento.lugar}`);
+            if (evento.horaInicio) partes.push(`🕒 ${evento.horaInicio}${evento.horaFin ? ' - ' + evento.horaFin : ''}`);
+            return partes.join(' — ');
+        }
+
+        function renderEventoSlides() {
+            trackEl.style.width = `${eventosSlides.length * 100}%`;
+            trackEl.innerHTML = eventosSlides.map(slide => `
+                <div style="width:${100 / eventosSlides.length}%" class="shrink-0 space-y-1.5 pr-1 min-w-0">
+                    <div class="flex justify-between items-center gap-2">
+                        <h4 class="text-sm font-bold text-slate-800 dark:text-white truncate min-w-0" title="${slide.titulo}">${slide.titulo}</h4>
+                        <span class="shrink-0 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs px-2.5 py-0.5 rounded-full font-medium">${slide.badge}</span>
+                    </div>
+                    ${slide.detalle ? `<p class="text-xs text-slate-600 dark:text-slate-400 leading-normal truncate min-w-0">${slide.detalle}</p>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function renderEventoDots() {
+            if (!dotsEl) return;
+            if (eventosSlides.length <= 1) {
+                dotsEl.innerHTML = '';
+                return;
+            }
+            dotsEl.innerHTML = eventosSlides.map((_, i) => `
+                <button data-index="${i}" class="evento-dot w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-700 transition-colors" aria-label="Ir al evento ${i + 1}"></button>
+            `).join('');
+
+            dotsEl.querySelectorAll('.evento-dot').forEach(dot => {
+                dot.addEventListener('click', () => {
+                    goToEventoSlide(parseInt(dot.dataset.index, 10));
+                    restartEventoAutoplay();
+                });
+            });
+        }
+
+        function goToEventoSlide(index) {
+            eventoIndex = (index + eventosSlides.length) % eventosSlides.length;
+            const offset = eventoIndex * (100 / eventosSlides.length);
+            trackEl.style.transform = `translateX(-${offset}%)`;
+
+            if (dotsEl) {
+                dotsEl.querySelectorAll('.evento-dot').forEach((dot, i) => {
+                    dot.classList.toggle('bg-pink-500', i === eventoIndex);
+                    dot.classList.toggle('bg-slate-300', i !== eventoIndex);
+                    dot.classList.toggle('dark:bg-slate-700', i !== eventoIndex);
+                });
+            }
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', () => { goToEventoSlide(eventoIndex - 1); restartEventoAutoplay(); });
+        if (nextBtn) nextBtn.addEventListener('click', () => { goToEventoSlide(eventoIndex + 1); restartEventoAutoplay(); });
+
+        function startEventoAutoplay() {
+            eventoAutoplay = setInterval(() => goToEventoSlide(eventoIndex + 1), 3000);
+        }
+        function stopEventoAutoplay() { clearInterval(eventoAutoplay); }
+        function restartEventoAutoplay() { stopEventoAutoplay(); startEventoAutoplay(); }
     }
 
 
@@ -957,200 +1087,46 @@ function renderActividades(lista) {
         let slides = [];
         let currentIndex = 0;
         let autoplayTimer = null;
-      // ==========================================================================
-// MÓDULO 5: CARRUSEL "PRÓXIMOS EVENTOS" (index.html)
-// ==========================================================================
 
-const proximoEventoCard = document.getElementById('proximo-evento-card');
+        Promise.all([
+            cargarJSON('eventos.json'),
+            cargarJSON('galeria.json')
+        ])
+            .then(([eventos, galeria]) => initMomentosCarousel(eventos, galeria))
+            .catch(err => console.error('Error al cargar datos del carrusel Momentos SID:', err));
 
-if (proximoEventoCard) {
-    const trackEl = document.getElementById('proximo-evento-track');
-    const dotsEl = document.getElementById('proximo-evento-dots');
-    const prevBtn = document.getElementById('proximo-evento-prev');
-    const nextBtn = document.getElementById('proximo-evento-next');
+        function initMomentosCarousel(eventos, galeria) {
+            if (!Array.isArray(eventos)) eventos = [];
+            if (!Array.isArray(galeria)) galeria = [];
 
-    let eventosSlides = [];
-    let eventoIndex = 0;
-    let eventoAutoplay = null;
+            slides = relacionarGaleriaConActividades(galeria, eventos).slice(0, 5);
 
-    cargarJSON('eventos.json')
-        .then(data => initProximosEventosCarousel(data))
-        .catch(err => {
-            console.error('Error al cargar eventos.json (carrusel próximos eventos):', err);
-            if (trackEl) {
-                trackEl.innerHTML = `<p class="text-xs text-slate-500 dark:text-slate-400 shrink-0 w-full">No se pudieron cargar los eventos.</p>`;
-            }
-            if (prevBtn) prevBtn.classList.add('hidden');
-            if (nextBtn) nextBtn.classList.add('hidden');
-        });
-
-    function initProximosEventosCarousel(eventos) {
-        if (!Array.isArray(eventos)) eventos = [];
-
-        const formatDateLocal = (d) => {
-            const y = d.getFullYear();
-            const m = String(d.getMonth() + 1).padStart(2, '0');
-            const day = String(d.getDate()).padStart(2, '0');
-            return `${y}-${m}-${day}`;
-        };
-        const todayStr = formatDateLocal(new Date());
-
-        // 1) Eventos "En curso" primero
-        const enCurso = eventos.filter(e => (e.estado || '').toLowerCase() === 'en curso');
-
-        // 2) Eventos futuros, ordenados por fecha más cercana
-        const futuros = eventos
-            .filter(e => (e.estado || '').toLowerCase() !== 'en curso' && e.fechaInicio && e.fechaInicio >= todayStr)
-            .sort((a, b) => a.fechaInicio.localeCompare(b.fechaInicio));
-
-        // Máximo 5 eventos en el carrusel (en curso + próximos)
-        eventosSlides = [...enCurso, ...futuros].slice(0, 5).map(evento => ({
-            titulo: evento.titulo || '',
-            badge: calcularBadge(evento, todayStr),
-            detalle: construirDetalle(evento)
-        }));
-
-        if (!eventosSlides.length) {
-            trackEl.innerHTML = `<p class="text-xs text-slate-500 dark:text-slate-400 shrink-0 w-full">No hay eventos próximos por ahora.</p>`;
-            if (prevBtn) prevBtn.classList.add('hidden');
-            if (nextBtn) nextBtn.classList.add('hidden');
-            return;
-        }
-
-        renderEventoSlides();
-        renderEventoDots();
-        goToEventoSlide(0);
-
-        if (eventosSlides.length > 1) {
-            startEventoAutoplay();
-            proximoEventoCard.addEventListener('mouseenter', stopEventoAutoplay);
-            proximoEventoCard.addEventListener('mouseleave', startEventoAutoplay);
-        } else {
-            if (prevBtn) prevBtn.classList.add('hidden');
-            if (nextBtn) nextBtn.classList.add('hidden');
-        }
-    }
-
-    function calcularBadge(evento, todayStr) {
-        const estado = (evento.estado || '').toLowerCase();
-        if (estado === 'en curso') return 'En curso';
-        if (evento.fechaInicio) {
-            const diffDias = Math.round(
-                (new Date(evento.fechaInicio) - new Date(todayStr)) / (1000 * 60 * 60 * 24)
-            );
-            if (diffDias === 0) return 'Hoy';
-            if (diffDias === 1) return 'Mañana';
-            if (diffDias > 1) return `En ${diffDias} días`;
-            return evento.fechaInicio;
-        }
-        return 'Próximamente';
-    }
-
-    // Se omitió evento.descripcion para dejar únicamente lugar y hora
-    function construirDetalle(evento) {
-        const partes = [];
-        if (evento.lugar) partes.push(`📍 ${evento.lugar}`);
-        if (evento.horaInicio) partes.push(`🕒 ${evento.horaInicio}${evento.horaFin ? ' - ' + evento.horaFin : ''}`);
-        return partes.join(' — ');
-    }
-
-    function renderEventoSlides() {
-        trackEl.style.width = `${eventosSlides.length * 100}%`;
-        trackEl.innerHTML = eventosSlides.map(slide => `
-            <div style="width:${100 / eventosSlides.length}%" class="shrink-0 space-y-1.5 pr-1 min-w-0">
-                <div class="flex justify-between items-center gap-2">
-                    <h4 class="text-sm font-bold text-slate-800 dark:text-white truncate min-w-0" title="${slide.titulo}">${slide.titulo}</h4>
-                    <span class="shrink-0 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs px-2.5 py-0.5 rounded-full font-medium">${slide.badge}</span>
+            if (slides.length === 0) {
+                momentosCarousel.innerHTML = `
+                <div class="p-10 text-center text-slate-400 text-sm">
+                    Aún no hay imágenes destacadas de actividades.
                 </div>
-                ${slide.detalle ? `<p class="text-xs text-slate-600 dark:text-slate-400 leading-normal truncate min-w-0">${slide.detalle}</p>` : ''}
-            </div>
-        `).join('');
-    }
+            `;
+                if (prevBtn) prevBtn.classList.add('hidden');
+                if (nextBtn) nextBtn.classList.add('hidden');
+                return;
+            }
 
-    function renderEventoDots() {
-        if (!dotsEl) return;
-        if (eventosSlides.length <= 1) {
-            dotsEl.innerHTML = '';
-            return;
+            renderSlides();
+            renderDots();
+            goToSlide(0);
+            startAutoplay();
+
+            momentosCarousel.addEventListener('mouseenter', stopAutoplay);
+            momentosCarousel.addEventListener('mouseleave', startAutoplay);
         }
-        dotsEl.innerHTML = eventosSlides.map((_, i) => `
-            <button data-index="${i}" class="evento-dot w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-700 transition-colors" aria-label="Ir al evento ${i + 1}"></button>
-        `).join('');
 
-        dotsEl.querySelectorAll('.evento-dot').forEach(dot => {
-            dot.addEventListener('click', () => {
-                goToEventoSlide(parseInt(dot.dataset.index, 10));
-                restartEventoAutoplay();
-            });
-        });
-    }
-
-    function goToEventoSlide(index) {
-        eventoIndex = (index + eventosSlides.length) % eventosSlides.length;
-        const offset = eventoIndex * (100 / eventosSlides.length);
-        trackEl.style.transform = `translateX(-${offset}%)`;
-
-        if (dotsEl) {
-            dotsEl.querySelectorAll('.evento-dot').forEach((dot, i) => {
-                dot.classList.toggle('bg-pink-500', i === eventoIndex);
-                dot.classList.toggle('bg-slate-300', i !== eventoIndex);
-                dot.classList.toggle('dark:bg-slate-700', i !== eventoIndex);
-            });
-        }
-    }
-
-    if (prevBtn) prevBtn.addEventListener('click', () => { goToEventoSlide(eventoIndex - 1); restartEventoAutoplay(); });
-    if (nextBtn) nextBtn.addEventListener('click', () => { goToEventoSlide(eventoIndex + 1); restartEventoAutoplay(); });
-
-    // Cambiado de 4500ms a 10000ms (10 segundos)
-    function startEventoAutoplay() {
-        eventoAutoplay = setInterval(() => goToEventoSlide(eventoIndex + 1), 3000);
-    }
-    function stopEventoAutoplay() { clearInterval(eventoAutoplay); }
-    function restartEventoAutoplay() { stopEventoAutoplay(); startEventoAutoplay(); }
-}
-
-Promise.all([
-    cargarJSON('eventos.json'),
-    cargarJSON('galeria.json')
-])
-    .then(([eventos, galeria]) => initMomentosCarousel(eventos, galeria))
-    .catch(err => console.error('Error al cargar datos del carrusel Momentos SID:', err));
-
-function initMomentosCarousel(eventos, galeria) {
-    if (!Array.isArray(eventos)) eventos = [];
-    if (!Array.isArray(galeria)) galeria = [];
-
-    slides = relacionarGaleriaConActividades(galeria, eventos).slice(0, 5);
-
-    if (slides.length === 0) {
-        momentosCarousel.innerHTML = `
-        <div class="p-10 text-center text-slate-400 text-sm">
-            Aún no hay imágenes destacadas de actividades.
-        </div>
-    `;
-        if (prevBtn) prevBtn.classList.add('hidden');
-        if (nextBtn) nextBtn.classList.add('hidden');
-        return;
-    }
-
-    renderSlides();
-    renderDots();
-    goToSlide(0);
-    startAutoplay();
-
-    momentosCarousel.addEventListener('mouseenter', stopAutoplay);
-    momentosCarousel.addEventListener('mouseleave', startAutoplay);
-}
-        // --- Emparejamiento galeria <-> eventos ---
-        // Ideal: cada objeto de galeria.json trae "actividadId" que coincide con el "id" de eventos.json.
-        // Como el JSON actual no lo trae, se hace un match por palabras clave en "evento"/"titulo" vs "titulo" del evento.
         const STOPWORDS = new Set(['de', 'la', 'el', 'los', 'las', 'y', 'a', 'en', 'del', 'con', 'para', 'un', 'una', '2026']);
 
         function tokenizar(texto) {
             return (texto || '')
                 .toLowerCase()
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quita tildes
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
                 .replace(/[^a-z0-9\s]/g, ' ')
                 .split(/\s+/)
                 .filter(t => t && !STOPWORDS.has(t));
@@ -1158,7 +1134,6 @@ function initMomentosCarousel(eventos, galeria) {
 
         function relacionarGaleriaConActividades(galeria, eventos) {
             return galeria.map(foto => {
-                // Match exacto si algún día agregan actividadId
                 if (foto.actividadId) {
                     const directo = eventos.find(e => e.id === foto.actividadId);
                     if (directo) {
@@ -1166,7 +1141,6 @@ function initMomentosCarousel(eventos, galeria) {
                     }
                 }
 
-                // Match por palabras clave compartidas
                 const tokensFoto = new Set([...tokenizar(foto.evento), ...tokenizar(foto.titulo)]);
                 let mejor = null;
                 let mejorPuntaje = 0;
@@ -1184,10 +1158,11 @@ function initMomentosCarousel(eventos, galeria) {
                 return {
                     imagen: foto.imagen || foto.url,
                     titulo: foto.titulo || (mejor ? mejor.titulo : 'Momento SID'),
-                    actividadId: mejor ? mejor.id : null // si no hay match, se redirige sin ancla
+                    actividadId: mejor ? mejor.id : null 
                 };
             }).filter(s => !!s.imagen);
         }
+
         function renderSlides() {
             momentosTrack.style.width = `${slides.length * 100}%`;
             momentosTrack.innerHTML = slides.map(slide => {
@@ -1195,34 +1170,30 @@ function initMomentosCarousel(eventos, galeria) {
                     ? `actividades.html#${encodeURIComponent(slide.actividadId)}`
                     : `actividades.html`;
                 return `
-        <a href="${href}"
-           style="width:${100 / slides.length}%"
-           class="momento-slide relative flex-shrink-0 h-72 md:h-96 block group overflow-hidden bg-slate-950">
-            
-            <!-- 1. Imagen de fondo difuminada (Rellena todo el contenedor) -->
-            <img src="${slide.imagen}" alt="" aria-hidden="true"
-                 class="absolute inset-0 w-full h-full object-cover blur-md scale-110 opacity-60 pointer-events-none" />
+                <a href="${href}"
+                   style="width:${100 / slides.length}%"
+                   class="momento-slide relative flex-shrink-0 h-72 md:h-96 block group overflow-hidden bg-slate-950">
+                    
+                    <img src="${slide.imagen}" alt="" aria-hidden="true"
+                         class="absolute inset-0 w-full h-full object-cover blur-md scale-110 opacity-60 pointer-events-none" />
 
-            <!-- 2. Imagen principal sin recortes ni deformación -->
-            <img src="${slide.imagen}" alt="${slide.titulo}"
-                 class="relative z-10 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
-                 onerror="this.src='assets/pacha/Mesa de trabajo 21 copia 2-8.png'; this.classList.add('p-10');" />
+                    <img src="${slide.imagen}" alt="${slide.titulo}"
+                         class="relative z-10 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                         onerror="this.src='assets/pacha/Mesa de trabajo 21 copia 2-8.png'; this.classList.add('p-10');" />
 
-            <!-- 3. Gradiente para legibilidad del texto -->
-            <div class="absolute inset-0 z-20 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none"></div>
+                    <div class="absolute inset-0 z-20 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none"></div>
 
-            <!-- 4. Título de la imagen -->
-            <span class="absolute bottom-4 left-5 z-30 text-white font-bold text-lg drop-shadow-md">${slide.titulo}</span>
-        </a>
-    `;
+                    <span class="absolute bottom-4 left-5 z-30 text-white font-bold text-lg drop-shadow-md">${slide.titulo}</span>
+                </a>
+            `;
             }).join('');
         }
 
         function renderDots() {
             if (!dotsContainer) return;
             dotsContainer.innerHTML = slides.map((_, i) => `
-            <button data-index="${i}" class="momento-dot w-2.5 h-2.5 rounded-full bg-white/50 hover:bg-white transition-colors" aria-label="Ir a la imagen ${i + 1}"></button>
-        `).join('');
+                <button data-index="${i}" class="momento-dot w-2.5 h-2.5 rounded-full bg-white/50 hover:bg-white transition-colors" aria-label="Ir a la imagen ${i + 1}"></button>
+            `).join('');
 
             dotsContainer.querySelectorAll('.momento-dot').forEach(dot => {
                 dot.addEventListener('click', () => {
@@ -1255,10 +1226,12 @@ function initMomentosCarousel(eventos, galeria) {
         function stopAutoplay() { clearInterval(autoplayTimer); }
         function restartAutoplay() { stopAutoplay(); startAutoplay(); }
     }
+
+
     // ==========================================================================
     // HELPER GLOBAL: Badge visual según el estado de una actividad
-    // (Usado por el calendario/cronograma y por actividades.html)
     // ==========================================================================
+    
     function getStatusBadge(estado) {
         const est = (estado || '').toLowerCase().replace('_', ' ');
         let badgeClass = 'bg-sky-500/10 text-sky-500 border-sky-500/20';
@@ -1273,6 +1246,5 @@ function initMomentosCarousel(eventos, galeria) {
 
         return `<span class="border text-xs font-semibold px-2.5 py-0.5 rounded-full ${badgeClass}">${estado || 'General'}</span>`;
     }
-    
 
 });

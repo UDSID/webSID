@@ -12,7 +12,34 @@
     "lugar": "edificio administrativo, Piso 3, Oficina 1",
     "link": "https://forms.cloud.microsoft/r/p13vZ4jWGk",
     "colorAccent": "#b6f472"
-  }
-  
+  },
+   {
+    "id": "act-02",
+    "titulo": "COMPETENCIA BASE DE DATOS",
+    "descripcion": "¿Te apasiona el manejo de la información y buscas poner a prueba tus capacidades técnicas? Te invitamos a inscribirte en la Competencia de Bases de Datos. El evento cuenta con tres categorías (Nivel 1, Nivel 2 y Nivel 3) adaptadas para todos los niveles de experiencia. ¡No te lo pierdas!",
+    "categoria": "competencia",
+    "estado": "PROXIMA",
+    "fechaInicio": "2026-10-02",
+    "fechaFin": "",
+    "horaInicio": "",
+    "horaFin": "",
+    "lugar": "edeficio sabio caldas",
+    "link": "/inscripcion competencias/inscripcion competencias.html",
+    "colorAccent": "#69140e"
+    },
+    {
+    "id": "act-03",
+    "titulo": "MARATON DE PROGRAMACIÓN",
+    "descripcion": "¿Listo para el reto definitivo de código? Participa en la Maratón de Programación y demuestra tu talento analítico. Contamos con categorías para todos los perfiles: Básico, Intermedio, Avanzado y Élite. ¡Forma tu equipo y inscríbete hoy mismo!",
+    "categoria": "competencia",
+    "estado": "PROXIMA",
+    "fechaInicio": "2026-10-09",
+    "fechaFin": "",
+    "horaInicio": "",
+    "horaFin": "",
+    "lugar": "edeficio sabio caldas",
+    "link": "/inscripcion competencias/inscripcion competencias.html",
+    "colorAccent": "#054050"
+    }
   
 ]

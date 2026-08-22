@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+
+<head>
+    <script>
+        // Se ejecuta de inmediato antes de que el navegador renderice el <body>
+        (function () {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark' || !theme) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripción a Competencias - SID</title>
+
+    <!-- Hoja de estilos global del sitio (arquitectura compartida) -->
+    <link rel="stylesheet" href="../style.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brandDark: '#0b1319',
+                        cardDark: '#121e28',
+                        primaryAccent: '#38bdf8',
+                        pinkAccent: '#f472b6'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@600;700;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <!-- Hoja de estilos propia de este formulario (arquitectura modular: CSS separado del JS) -->
+    <link rel="stylesheet" href="inscripcion-competencias.css">
+</head>
+
+<body
+    class="bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white min-h-screen flex flex-col font-sans selection:bg-sky-500 selection:text-white transition-colors duration-300">
+
+    <!-- Header / Navigation (compartido con el resto del sitio) -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-grow max-w-2xl mx-auto px-6 py-10 w-full space-y-8">
+
+        <div class="text-center space-y-2">
+            <h1 class="text-4xl font-extrabold text-sky-500 dark:text-sky-400">Inscripción a Competencias</h1>
+            <p class="text-slate-600 dark:text-slate-400 text-sm">
+                Regístrate junto tu equipo (mínimo 1, máximo 3 integrantes) para participar en la competencia de tu
+                preferencia.
+            </p>
+        </div>
+
+        <form id="inscripcion-form" novalidate
+            class="bg-white dark:bg-[#121e28] border border-slate-200 dark:border-white/5 rounded-2xl p-8 shadow-sm space-y-8">
+
+            <!-- ============================================================
+                 1. SELECCIÓN DE COMPETENCIA
+                 ============================================================ -->
+            <div>
+                <span class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    Competencia <span class="text-pink-500">*</span>
+                </span>
+                <div class="flex flex-wrap gap-3" id="competencia-group">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="competencia" value="Competencia de Bases de Datos" required
+                            class="peer sr-only">
+                        <span
+                            class="inline-block px-5 py-2 rounded-full text-xs font-semibold border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 peer-checked:bg-sky-500 peer-checked:border-sky-500 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-sky-500 transition-all">
+                            Competencia de Bases de Datos
+                        </span>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="competencia" value="Maratón de Programación" required
+                            class="peer sr-only">
+                        <span
+                            class="inline-block px-5 py-2 rounded-full text-xs font-semibold border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 peer-checked:bg-sky-500 peer-checked:border-sky-500 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-sky-500 transition-all">
+                            Maratón de Programación
+                        </span>
+                    </label>
+                </div>
+                <p id="competencia-error" class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm leading-none">error</span>
+                    Selecciona una competencia
+                </p>
+            </div>
+
+            <!-- ============================================================
+                 1.2. SELECCIÓN DE CATEGORÍA (Dependiente de la competencia)
+                 ============================================================ -->
+            <div id="categoria-container" class="hidden space-y-2">
+                <span class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    Categoría <span class="text-pink-500">*</span>
+                </span>
+                <div class="flex flex-wrap gap-3" id="categoria-group">
+                    <!-- Las opciones se cargan dinámicamente con JavaScript -->
+                </div>
+                <p id="categoria-error" class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm leading-none">error</span>
+                    Selecciona una categoría
+                </p>
+            </div>
+
+            <!-- ============================================================
+                 1.5. NOMBRE DEL EQUIPO
+                 ============================================================ -->
+            <div>
+                <label for="nombre-equipo" class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    Nombre del Equipo <span class="text-pink-500">*</span>
+                </label>
+                <input type="text" id="nombre-equipo" name="nombre_equipo" required
+                    placeholder="Ej. Los Depuradores"
+                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                <p id="nombre-equipo-error" class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm leading-none">error</span>
+                    Ingresa el nombre del equipo
+                </p>
+            </div>
+
+            <!-- ============================================================
+                 2. INTEGRANTES (BLOQUE DINÁMICO EN FORMATO CARRUSEL)
+                 ============================================================ -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                    <span class="block text-sm font-semibold text-slate-700 dark:text-slate-200">
+                        Integrantes del equipo <span class="text-pink-500">*</span>
+                    </span>
+
+                    <div class="flex items-center gap-3">
+                        <span id="integrantes-contador" class="text-xs font-semibold text-sky-500 dark:text-sky-400">
+                            Integrante 1 de 3
+                        </span>
+                        <div class="flex items-center gap-1">
+                            <button type="button" id="integrante-prev-btn"
+                                class="p-1.5 rounded-full border border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-sky-500 hover:border-sky-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                aria-label="Integrante anterior">
+                                <span class="material-symbols-outlined text-lg">chevron_left</span>
+                            </button>
+                            <button type="button" id="integrante-next-btn"
+                                class="p-1.5 rounded-full border border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-sky-500 hover:border-sky-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                aria-label="Siguiente integrante">
+                                <span class="material-symbols-outlined text-lg">chevron_right</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Viewport del carrusel -->
+                <div class="relative overflow-hidden border border-slate-200 dark:border-white/10 rounded-xl">
+                    <div id="integrantes-track" class="flex transition-transform duration-400 ease-in-out">
+
+                        <!-- ---------- Integrante 1 ---------- -->
+                        <div class="integrante-slide w-full flex-shrink-0 p-5 space-y-4" data-integrante="1">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-bold text-sky-500 dark:text-sky-400">Integrante 1</h3>
+                            </div>
+
+                            <div>
+                                <label for="nombre-1" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                                    Nombre Completo <span class="text-pink-500">*</span>
+                                </label>
+                                <input type="text" id="nombre-1" name="integrante1_nombre" required
+                                    placeholder="Nombre y apellido"
+                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                                <p class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1 campo-error"
+                                    data-error-for="nombre-1">
+                                    <span class="material-symbols-outlined text-sm leading-none">error</span>
+                                    Ingresa el nombre completo
+                                </p>
+                            </div>
+
+                            <div>
+                                <label for="codigo-1" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                                    Código <span class="text-pink-500">*</span>
+                                </label>
+                                <input type="text" id="codigo-1" name="integrante1_codigo" required
+                                    placeholder="20221020123"
+                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                                <p class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1 campo-error"
+                                    data-error-for="codigo-1">
+                                    <span class="material-symbols-outlined text-sm leading-none">error</span>
+                                    Ingresa un código válido
+                                </p>
+                            </div>
+
+                            <div>
+                                <label for="correo-1" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                                    Correo Institucional <span class="text-pink-500">*</span>
+                                </label>
+                                <input type="email" id="correo-1" name="integrante1_correo" required
+                                    placeholder="ejemplo@udistrital.edu.co"
+                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                                <p class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1 campo-error"
+                                    data-error-for="correo-1">
+                                    <span class="material-symbols-outlined text-sm leading-none">error</span>
+                                    Ingresa un correo válido (@udistrital.edu.co o @gmail.com)
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- ---------- Integrante 2 ---------- -->
+                        <div class="integrante-slide w-full flex-shrink-0 p-5 space-y-4" data-integrante="2">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-bold text-sky-500 dark:text-sky-400">Integrante 2</h3>
+                                <button type="button" class="btn-eliminar-integrante hidden flex items-center gap-1 text-xs font-semibold text-pink-500 hover:text-pink-600 transition-colors"
+                                    data-target="2">
+                                    <span class="material-symbols-outlined text-base">delete</span> Eliminar
+                                </button>
+                            </div>
+
+                            <div>
+                                <label for="nombre-2" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                                    Nombre Completo <span class="text-pink-500">*</span>
+                                </label>
+                                <input type="text" id="nombre-2" name="integrante2_nombre"
+                                    placeholder="Nombre y apellido"
+                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                                <p class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1 campo-error"
+                                    data-error-for="nombre-2">
+                                    <span class="material-symbols-outlined text-sm leading-none">error</span>
+                                    Ingresa el nombre completo
+                                </p>
+                            </div>
+
+                            <div>
+                                <label for="codigo-2" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                                    Código <span class="text-pink-500">*</span>
+                                </label>
+                                <input type="text" id="codigo-2" name="integrante2_codigo"
+                                    placeholder="20221020123"
+                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                                <p class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1 campo-error"
+                                    data-error-for="codigo-2">
+                                    <span class="material-symbols-outlined text-sm leading-none">error</span>
+                                    Ingresa un código válido
+                                </p>
+                            </div>
+
+                            <div>
+                                <label for="correo-2" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                                    Correo Institucional <span class="text-pink-500">*</span>
+                                </label>
+                                <input type="email" id="correo-2" name="integrante2_correo"
+                                    placeholder="ejemplo@udistrital.edu.co"
+                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                                <p class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1 campo-error"
+                                    data-error-for="correo-2">
+                                    <span class="material-symbols-outlined text-sm leading-none">error</span>
+                                    Ingresa un correo válido (@udistrital.edu.co o @gmail.com)
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- ---------- Integrante 3 ---------- -->
+                        <div class="integrante-slide w-full flex-shrink-0 p-5 space-y-4" data-integrante="3">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-bold text-sky-500 dark:text-sky-400">Integrante 3</h3>
+                                <button type="button" class="btn-eliminar-integrante hidden flex items-center gap-1 text-xs font-semibold text-pink-500 hover:text-pink-600 transition-colors"
+                                    data-target="3">
+                                    <span class="material-symbols-outlined text-base">delete</span> Eliminar
+                                </button>
+                            </div>
+
+                            <div>
+                                <label for="nombre-3" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                                    Nombre Completo <span class="text-pink-500">*</span>
+                                </label>
+                                <input type="text" id="nombre-3" name="integrante3_nombre"
+                                    placeholder="Nombre y apellido"
+                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                                <p class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1 campo-error"
+                                    data-error-for="nombre-3">
+                                    <span class="material-symbols-outlined text-sm leading-none">error</span>
+                                    Ingresa el nombre completo
+                                </p>
+                            </div>
+
+                            <div>
+                                <label for="codigo-3" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                                    Código <span class="text-pink-500">*</span>
+                                </label>
+                                <input type="text" id="codigo-3" name="integrante3_codigo"
+                                    placeholder="20221020123"
+                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                                <p class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1 campo-error"
+                                    data-error-for="codigo-3">
+                                    <span class="material-symbols-outlined text-sm leading-none">error</span>
+                                    Ingresa un código válido
+                                </p>
+                            </div>
+
+                            <div>
+                                <label for="correo-3" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                                    Correo Institucional <span class="text-pink-500">*</span>
+                                </label>
+                                <input type="email" id="correo-3" name="integrante3_correo"
+                                    placeholder="ejemplo@udistrital.edu.co"
+                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#0b1319] text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 outline-none transition-all">
+                                <p class="hidden text-xs text-pink-500 font-semibold mt-2 flex items-center gap-1 campo-error"
+                                    data-error-for="correo-3">
+                                    <span class="material-symbols-outlined text-sm leading-none">error</span>
+                                    Ingresa un correo válido (@udistrital.edu.co o @gmail.com)
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Puntos indicadores del carrusel -->
+                <div id="integrantes-dots" class="flex items-center justify-center gap-2">
+                    <button type="button" class="integrante-dot" data-slide="1" aria-label="Ir al integrante 1"></button>
+                    <button type="button" class="integrante-dot hidden" data-slide="2" aria-label="Ir al integrante 2"></button>
+                    <button type="button" class="integrante-dot hidden" data-slide="3" aria-label="Ir al integrante 3"></button>
+                </div>
+
+                <!-- Botón para añadir integrantes -->
+                <button type="button" id="btn-anadir-integrante"
+                    class="w-full flex items-center justify-center gap-2 border-2 border-dashed border-sky-400/50 text-sky-500 dark:text-sky-400 hover:bg-sky-500/10 font-semibold text-sm px-4 py-3 rounded-xl transition-all">
+                    <span class="material-symbols-outlined">person_add</span>
+                    Añadir integrante
+                </button>
+            </div>
+
+            <!-- Botón de Envío -->
+            <button type="submit" id="submit-btn"
+                class="w-full bg-sky-500 hover:bg-sky-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl shadow-lg transition-all flex justify-center items-center gap-2">
+                <span class="material-symbols-outlined" id="submit-icon">send</span>
+                <span id="submit-text">Confirmar Inscripción</span>
+            </button>
+        </form>
+    </main>
+
+    <!-- Modal flotante de éxito -->
+    <div id="success-modal"
+        class="hidden fixed inset-0 z-[100] flex items-center justify-center px-4 bg-slate-950/70 backdrop-blur-sm">
+        <div
+            class="bg-white dark:bg-[#121e28] border border-slate-200 dark:border-white/10 rounded-3xl p-8 max-w-sm w-full text-center space-y-4 shadow-2xl animate-[fadeIn_0.2s_ease-out]">
+            <div class="w-16 h-16 mx-auto bg-emerald-500/10 text-emerald-500 rounded-full flex items-center justify-center">
+                <span class="material-symbols-outlined text-4xl">check_circle</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">¡Equipo Inscrito!</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400">
+                Tu equipo ha sido registrado correctamente en la competencia. Atento a tu correo institucional.
+            </p>
+            <button id="close-modal-btn"
+                class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 rounded-xl transition-all">
+                Aceptar
+            </button>
+        </div>
+    </div>
+
+    <!-- Unified Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts compartidos del sitio -->
+    <script src="script.js"></script>
+    <!-- Script propio de este formulario -->
+    <script src="inscripcion competencias.js"></script>
+    <script src="/components/components.js"></script>
+</body>
+
+</html>
