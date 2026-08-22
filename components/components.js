@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     // 1. Cargar el Header y luego inicializar sus funciones
-    //    Ruta ABSOLUTA (empieza con "/") para que funcione sin importar
+    //    Ruta ABSOLUTA (empieza con "/webSID/") para que funcione sin importar
     //    si la página está en la raíz o en una subcarpeta
-    //    (ej: /inscripcion competencias/inscripcion-competencias.html).
     fetch("/webSID/components/header.html")
         .then(response => response.text())
         .then(data => {
