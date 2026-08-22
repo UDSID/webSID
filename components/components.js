@@ -78,7 +78,9 @@ function highlightActiveLink() {
         page = "index.html";
     }
     
-    const navLinks = document.querySelectorAll('#header-container a');
+    // Solo seleccionamos los enlaces del menú de navegación, ignorando el logo
+    const navLinks = document.querySelectorAll('#nav-desktop a, #mobile-menu a');
+    
     navLinks.forEach(link => {
         const linkHref = link.getAttribute("href");
         
@@ -91,5 +93,4 @@ function highlightActiveLink() {
             link.classList.remove("active");
         }
     });
-}
 }
