@@ -72,19 +72,24 @@ function actualizarIconoTema() {
 function highlightActiveLink() {
     const path = window.location.pathname;
     let page = path.split("/").pop();
-    if (page === "" || page === "/") {
+    
+    // Si estamos en la raíz del repositorio (ej: github.io/webSID o github.io/webSID/)
+    if (page === "" || page === "webSID" || !page.includes(".html")) {
         page = "index.html";
     }
+    
     const navLinks = document.querySelectorAll('#header-container a');
     navLinks.forEach(link => {
         const linkHref = link.getAttribute("href");
-        // Normaliza quitando la barra inicial ("/index.html" -> "index.html")
-        // para que la comparación funcione ahora que los enlaces son absolutos.
-        const linkPage = linkHref ? linkHref.replace(/^\//, '') : '';
+        
+        // Extraemos solo el nombre del archivo del enlace (ej: "actividades.html")
+        const linkPage = linkHref ? linkHref.split('/').pop() : '';
+        
         if (linkPage === page) {
             link.classList.add("active");
         } else {
             link.classList.remove("active");
         }
     });
+}
 }
