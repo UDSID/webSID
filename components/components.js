@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //    Ruta ABSOLUTA (empieza con "/") para que funcione sin importar
     //    si la página está en la raíz o en una subcarpeta
     //    (ej: /inscripcion competencias/inscripcion-competencias.html).
-    fetch("/components/header.html")
+    fetch("components/header.html")
         .then(response => response.text())
         .then(data => {
             document.getElementById("header-container").innerHTML = data;
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
     // 2. Cargar el Footer (misma razón: ruta absoluta)
-    fetch("/components/footer.html")
+    fetch("components/footer.html")
         .then(response => response.text())
         .then(data => {
             document.getElementById("footer-container").innerHTML = data;
