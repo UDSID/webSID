@@ -1,18 +1,17 @@
 [ 
-
  {
     "id": "act-04",
     "titulo":"Optimización Lógica y Algorítmica orientada a la Competencia ",
-    "descripcion": " Este curso intensivo está diseñado bajo un enfoque de programación competitiva de alto rendimiento. Durante las sesiones, los participantes elevarán su pensamiento lógico, optimizarán sus habilidades de resolución de problemas bajo presión y abordarán algoritmos y estructuras de datos avanzados mediante el desarrollo sistemático de ejercicios y retos característicos de maratones de programación internacionales. ",
+    "descripcion": " Este curso está diseñado bajo un enfoque de programación competitiva de alto rendimiento. Durante las sesiones, los participantes elevarán su pensamiento lógico, optimizarán sus habilidades de resolución de problemas bajo presión y abordarán algoritmos y estructuras de datos avanzados mediante el desarrollo sistemático de ejercicios y retos característicos de maratones de programación internacionales. Las clases seran los miércoles de 10am a 12pm de manera precensial y los sábados de 1pm a 3pm de manera virtual",
     "categoria": "Curso",
     "estado": "PROXIMA",
     "fechaInicio": "2026-08-29",
-    "fechaFin": "",
+    "fechaFin": "2026-10-03",
     "horaInicio": "",
     "horaFin": "",
     "lugar": "",
     "link": "",
-    "colorAccent": "#fffff"
+    "colorAccent": "#F54927"
   },
  {
     "id": "act-01",
