@@ -44,7 +44,7 @@ const MAX_INTEGRANTES = 3;
 
 // Definición de categorías según la competencia seleccionada
 const categoriasPorCompetencia = {
-    "Competencia de Bases de Datos": ["Nivel 1", "Nivel 2", "Nivel 3"],
+    "Competencia de Bases de Datos": ["Nivel Basico", "Nivel Intermedio"],
     "Maratón de Programación": ["Básico", "Intermedio", "Avanzado", "Élite"]
 };
 
