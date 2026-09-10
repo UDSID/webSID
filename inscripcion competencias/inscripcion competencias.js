@@ -14,7 +14,7 @@
 const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeUUmW1OTetjuMHz_aw7qClwR6rPLqCUvYXcy77YG28aOz7nQ/formResponse";
 
 const ENTRY_COMPETENCIA = "entry.325091311"; // Competencia seleccionada
-const ENTRY_CATEGORIA = "entry.141401132";   // Categoría seleccionada (Niveles o Niveles de Maratón)
+const ENTRY_CATEGORIA = "entry.141401132";   // Categoría seleccionada ( Niveles )
 const ENTRY_NOMBRE_EQUIPO = "entry.1888574681"; // Nombre del equipo
 
 const ENTRIES_INTEGRANTES = {
@@ -44,7 +44,7 @@ const MAX_INTEGRANTES = 3;
 
 // Definición de categorías según la competencia seleccionada
 const categoriasPorCompetencia = {
-    "Competencia de Bases de Datos": ["Nivel Basico", "Nivel Intermedio"],
+    "Competencia de Bases de Datos": ["Nivel Básico", "Nivel Intermedio"],
     "Maratón de Programación": ["Básico", "Intermedio", "Avanzado", "Élite"]
 };
 
