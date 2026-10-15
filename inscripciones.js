@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // CONTROL DE ACTIVACIÓN
     // Cambiar entre "true" y "false" para activar y desactivar las inscripiones
     // ======================================================================
-    const INSCRIPCIONES_ABIERTAS = true; 
+    const INSCRIPCIONES_ABIERTAS = false; 
 
     // Coloca el enlace de invitación de tu grupo/comunidad de WhatsApp
     const WHATSAPP_FORO_URL = "https://chat.whatsapp.com/DG2lJjWyTDB14OtOAap9zr?s=cl&p=a&ilr=1"; 
